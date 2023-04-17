@@ -1,12 +1,7 @@
-find_package(fmt CONFIG)
-find_package(spdlog CONFIG)
-find_package(CLI11 CONFIG REQUIRED)
+file(GLOB HEADERS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/include/*.hpp")
 
-# Generic test that uses conan libs
-add_executable(intro main.cpp)
-target_link_libraries(
-  intro
-  PUBLIC project_options project_warnings
-  PRIVATE CLI11::CLI11 fmt::fmt spdlog::spdlog)
+add_library(lib OBJECT
+            StereographicProjector.cpp
+            ${HEADERS})
 
-target_include_directories(intro PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")
+target_include_directories(lib PUBLIC ../include)

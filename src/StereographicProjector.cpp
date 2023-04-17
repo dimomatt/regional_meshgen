@@ -14,7 +14,7 @@ CartesianPoint StereographicProjector::projectToSphere(Point2D &point)
   outPoint.z = (-1 + point.x * point.x + point.y * point.y) / (2 * denominator);
  
   return outPoint;
-} // StereographicProjector::projectToSphere
+}; // StereographicProjector::projectToSphere
 
 Point2D StereographicProjector::projectToPlane(CartesianPoint &point)
 {
@@ -22,5 +22,5 @@ Point2D StereographicProjector::projectToPlane(CartesianPoint &point)
   outPoint.x = point.x / (1 - point.z);
   outPoint.y = point.y / (1 - point.z);
   return outPoint;
-}
+};
 

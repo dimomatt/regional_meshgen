@@ -43,5 +43,5 @@ class AbstractMesh
     /*! Get the voronoi diagram of the mesh */
     virtual void generateVoronoi() = 0;
 
-}
+};
 #endif // ABSTRACTMESH_H
