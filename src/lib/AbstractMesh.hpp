@@ -1,9 +1,11 @@
-#ifndef MESH_H
-#define MESH_H
+#ifndef ABSTRACTMESH_H
+#define ABSTRACTMESH_H
 
 #include <vector>
+#include <string>
+#include "point.hpp"
 
-class Mesh
+class AbstractMesh
 {
   private:
     int maxEdges;
@@ -15,9 +17,9 @@ class Mesh
 
   public:
     /* Mesh Elements */  
-    std::vector<std::vector<float>> cells;
-    std::vector<std::vector<float>> vertices;
-    std::vector<std::vector<float>> edges;
+    std::vector<CartesianPoint> cells;
+    std::vector<CartesianPoint> vertices;
+    std::vector<CartesianPint> edges;
 
     /*! Connectivity Fields */
     std::vector<int> nEdgesOnCell;
@@ -30,7 +32,7 @@ class Mesh
     std::vector<std::vector<int>> cellsOnEdge;
     
     /*! Write the file to a netcdf */
-    virtual void writeNetCDF() = 0;
+    virtual void writeNetCDF(std::string filename) = 0;
     
     /*! Generate the initial grid */
     virtual void generateCells() = 0;
@@ -42,3 +44,4 @@ class Mesh
     virtual void generateVoronoi() = 0;
 
 }
+#endif // ABSTRACTMESH_H

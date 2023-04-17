@@ -1,7 +1,10 @@
+#ifndef STEREOGRAPHICPROJECTOR_H
+#define STEREOGRAPHICPROJECTOR_H
 #include "projector.hpp"
-#include <vector>
 
 class stereographicProjector : public Projector
 {
 
 }
+
+#endif
