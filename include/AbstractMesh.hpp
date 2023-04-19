@@ -16,20 +16,25 @@ class AbstractMesh
     int nVertices;
 
   public:
-    /* Mesh Elements */  
+    int rows;
+    int cols;
+    int resolution;
+    
+    /* Mesh Elements */
+    std::vector<Point2D> cellsOnPlane;  
     std::vector<CartesianPoint> cells;
     std::vector<CartesianPoint> vertices;
-    std::vector<CartesianPint> edges;
+    std::vector<CartesianPoint> edges;
 
     /*! Connectivity Fields */
     std::vector<int> nEdgesOnCell;
-    std::vector<std::vector<int>> cellsOnCell;
-    std::vector<std::vector<int>> edgesOnCell;
-    std::vector<std::vector<int>> verticesOnCell;
-    std::vector<std::vector<int>> edgesOnVertex;
-    std::vector<std::vector<int>> verticesOnEdge;
-    std::vector<std::vector<int>> cellsOnvertex;
-    std::vector<std::vector<int>> cellsOnEdge;
+    std::vector< std::vector<int> > cellsOnCell;
+    std::vector< std::vector<int> > edgesOnCell;
+    std::vector< std::vector<int> > verticesOnCell;
+    std::vector< std::vector<int> > edgesOnVertex;
+    std::vector< std::vector<int> > verticesOnEdge;
+    std::vector< std::vector<int> > cellsOnvertex;
+    std::vector< std::vector<int> > cellsOnEdge;
     
     /*! Write the file to a netcdf */
     virtual void writeNetCDF(std::string filename) = 0;

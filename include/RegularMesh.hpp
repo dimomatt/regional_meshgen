@@ -7,6 +7,8 @@
 class RegularMesh : public AbstractMesh
 {
   public:
+    RegularMesh(int row_, int col_, float spacing_);
+
     /*! Write the file to a netcdf */
     void writeNetCDF(std::string filename);
     

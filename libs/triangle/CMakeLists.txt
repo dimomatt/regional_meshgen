@@ -1,0 +1,8 @@
+SET(CMAKE_C_FLAGS
+    "${CMAKE_C_FLAGS} -O -DLINUX -DTRILIBRARY -w -DANSI_DECLARATORS"
+   )
+SET(FILES_SOURCE
+    triangle.h triangle.c
+   )
+ADD_LIBRARY( triangle STATIC ${FILES_SOURCE})
+set_target_properties(triangle PROPERTIES LINKER_LANGUAGE C)
