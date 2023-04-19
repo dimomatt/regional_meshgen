@@ -3,6 +3,11 @@
 #include <string>
 #include <cmath>
 
+extern "C" {
+#include "triangle.h"
+}
+
+
 RegularMesh::RegularMesh(int rows_, int cols_, float spacing_)
 {
   spacing = spacing_;

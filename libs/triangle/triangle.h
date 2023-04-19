@@ -247,6 +247,12 @@
 /*  not used, `numberofsegments' will indicate the number of boundary edges. */
 /*                                                                           */
 /*****************************************************************************/
+#ifdef SINGLE
+#define REAL float
+#else
+#define REAL double
+#endif
+
 
 struct triangulateio {
   REAL *pointlist;                                               /* In / out */
