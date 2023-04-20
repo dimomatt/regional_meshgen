@@ -37,7 +37,7 @@ class AbstractMesh
     std::vector< std::vector<int> > cellsOnEdge;
     
     /*! Write the file to a netcdf */
-    virtual void writeNetCDF(std::string filename) = 0;
+    virtual void writeNetCDF(const std::string& filename) = 0;
     
     /*! Generate the initial grid */
     virtual void generateCells() = 0;

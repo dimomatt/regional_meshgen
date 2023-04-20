@@ -10,7 +10,7 @@ class RegularMesh : public AbstractMesh
     RegularMesh(int row_, int col_, float spacing_);
 
     /*! Write the file to a netcdf */
-    void writeNetCDF(std::string filename);
+    void writeNetCDF(const std::string& filename);
     
     /*! Generate the initial grid */
     void generateCells();
