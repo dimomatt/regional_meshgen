@@ -5,15 +5,18 @@ project(regional_meshgen VERSION 0.1
                          LANGUAGES CXX C
                          )
 set(CMAKE_CXX_STANDARD 14)
-                       
+option(BUILD_TESTS "Build tests for Regional Mesh Gen" ON)
+
+if(BUILD_TESTS)
+  Include(FetchContent)
+  FetchContent_Declare(
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG        v3.0.1 # or a later release
+        )
+  FetchContent_MakeAvailable(Catch2)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/tests)
+endif()
 add_subdirectory(${PROJECT_SOURCE_DIR}/src)
 add_subdirectory(${PROJECT_SOURCE_DIR}/app)
 add_subdirectory(${PROJECT_SOURCE_DIR}/libs/triangle)
-
-include(FetchContent)
-FetchContent_Declare(
-    googletest
-      URL
-      https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-      )
-
