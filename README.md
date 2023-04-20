@@ -1,10 +1,5 @@
 # MPAS Regional Mesh Generation
 
-[![ci](https://github.com/cpp-best-practices/gui_starter_template/actions/workflows/ci.yml/badge.svg)](https://github.com/cpp-best-practices/gui_starter_template/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/cpp-best-practices/gui_starter_template/branch/main/graph/badge.svg)](https://codecov.io/gh/cpp-best-practices/gui_starter_template)
-[![Language grade: C++](https://img.shields.io/lgtm/grade/cpp/github/cpp-best-practices/gui_starter_template)](https://lgtm.com/projects/g/cpp-best-practices/gui_starter_template/context:cpp)
-[![CodeQL](https://github.com/cpp-best-practices/gui_starter_template/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cpp-best-practices/gui_starter_template/actions/workflows/codeql-analysis.yml)
-
 ## About
 
 This repository provides tools that can be used to generate regional meshes for
