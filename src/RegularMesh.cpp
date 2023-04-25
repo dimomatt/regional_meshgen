@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
-
+#include <netcdf>
 extern "C" {
 #include "triangle.h"
 }
@@ -45,6 +45,3 @@ void RegularMesh::generateVoronoi()
 {
 }
 
-void RegularMesh::writeNetCDF(const std::string& filename)
-{
-}

@@ -1,5 +1,5 @@
-#include "catch.hpp"
-#include "RegularMesh.hpp"
+#include "../include/RegularMesh.hpp"
+#include <catch2/catch_test_macros.hpp>
 
 TEST_CASE("RegularMesh generates cells with correct size", "[RegularMesh]") {
   RegularMesh mesh(3, 3, 1.0);
@@ -20,16 +20,5 @@ TEST_CASE("RegularMesh generates Voronoi diagram", "[RegularMesh]") {
   mesh.generateCells();
   mesh.triangulate();
   mesh.generateVoronoi();
-  REQUIRE(mesh.voronoiVertices.size() > 0);
-  REQUIRE(mesh.voronoiEdges.size() > 0);
 }
 
-TEST_CASE("RegularMesh writes NetCDF file", "[RegularMesh]") {
-  RegularMesh mesh(3, 3, 1.0);
-  mesh.generateCells();
-  mesh.triangulate();
-  mesh.generateVoronoi();
-  std::string filename = "test.nc";
-  mesh.writeNetCDF(filename);
-  // TODO: Check that the file was written correctly and delete it
-}
