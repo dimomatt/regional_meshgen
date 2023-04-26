@@ -11,14 +11,7 @@ option(BUILD_TESTS "Build tests for Regional Mesh Gen" OFF)
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}-L/glade/u/apps/ch/opt/netcdf/4.8.1/gnu/10.1.0/lib -lnetcdf_c++4 -lnetcdf -I/glade/u/apps/ch/opt/netcdf/4.8.1/gnu/10.1.0/include -fPIC")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I/glade/u/apps/ch/opt/netcdf/4.8.1/gnu/10.1.0/include -fPIC")
 
-Include(FetchContent)
-  FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG        v3.0.1 # or a later release
-        )
-  FetchContent_MakeAvailable(Catch2)
-  add_subdirectory(${PROJECT_SOURCE_DIR}/tests)
+add_subdirectory(${PROJECT_SOURCE_DIR}/tests)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src)
 add_subdirectory(${PROJECT_SOURCE_DIR}/app)
 add_subdirectory(${PROJECT_SOURCE_DIR}/libs/triangle)

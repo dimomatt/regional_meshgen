@@ -1,6 +1,5 @@
 file(GLOB HEADERS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/include/*.hpp")
 
-message(${HEADERS})
 add_library(lib OBJECT
             StereographicProjector.cpp
             AbstractMesh.cpp
