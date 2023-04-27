@@ -21,7 +21,7 @@ RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
   /* TODO: Reserve the connectivity arrays for performance */
 }
 
-void RegularMesh::triangulate()
+void RegularMesh::generateVoronoi()
 {
   struct triangulateio in, mid, out, vorout;
   
@@ -54,7 +54,7 @@ void RegularMesh::triangulate()
   out.edgemarkerlist = NULL;
   out.normlist = NULL;
   char triswitches[] = "vz";
-  triangulate(triswitches, &in, &out, NULL);
+  triangulate(triswitches, &in, &out, &vorout);
   for (int i = 0; i < out.numberofpoints; i++) {
       std::cout << out.pointlist[2*i] << " " << out.pointlist[2*i+1] << std::endl;
   }
@@ -73,9 +73,5 @@ void RegularMesh::generateCells()
       this->cellsOnPlane.push_back(point);
     }
   }
-}
-
-void RegularMesh::generateVoronoi()
-{
 }
 

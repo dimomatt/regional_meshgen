@@ -12,9 +12,6 @@ class RegularMesh : public AbstractMesh
     /*! Generate the initial grid */
     void generateCells();
 
-    /*! Get the delaunay triangulation of the generating points */
-    void triangulate();
-
     /*! Get the voronoi diagram of the mesh */
     void generateVoronoi();
 };

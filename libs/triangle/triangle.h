@@ -284,11 +284,12 @@ struct triangulateio {
   REAL *normlist;                /* Used only with Voronoi diagram; out only */
   int numberofedges;                                             /* Out only */
 };
-
+// Defined by mdimond on 04/27/2023
+#define ANSI_DECLARATORS
 #ifdef ANSI_DECLARATORS
 void triangulate(char *, struct triangulateio *, struct triangulateio *,
                  struct triangulateio *);
-void trifree(VOID *memptr);
+void trifree();
 #else /* not ANSI_DECLARATORS */
 void triangulate();
 void trifree();

@@ -42,9 +42,6 @@ class AbstractMesh
     /*! Generate the initial grid */
     virtual void generateCells() = 0;
 
-    /*! Get the delaunay triangulation of the generating points */
-    virtual void triangulate() = 0;
-
     /*! Get the voronoi diagram of the mesh */
     virtual void generateVoronoi() = 0;
 
