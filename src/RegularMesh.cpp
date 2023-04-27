@@ -25,6 +25,40 @@ void RegularMesh::triangulate()
 {
   struct triangulateio in, mid, out, vorout;
   
+      std::vector<REAL> input_vertices = {
+                0.0, 0.0,
+                        0.0, 1.0,
+                                1.0, 0.0,
+                                        1.0, 1.0
+                                              };
+  
+  in.numberofpoints = 4;
+  in.pointlist = &input_vertices[0];
+  //in.numberofpoints = this->vertices.size();
+  in.numberofpointattributes = 0;
+  in.pointmarkerlist = NULL;
+  in.numberofsegments = 0;
+  in.segmentlist = NULL;
+  in.segmentmarkerlist = NULL;  
+
+  out.pointmarkerlist = NULL;
+  out.segmentlist = NULL;
+  out.segmentmarkerlist = NULL;  
+  out.pointlist = NULL;
+  out.trianglelist = NULL;
+  out.triangleattributelist = NULL;
+  out.trianglearealist = NULL;
+  out.neighborlist = NULL;
+  out.segmentlist = NULL;
+  out.segmentmarkerlist = NULL;
+  out.edgemarkerlist = NULL;
+  out.normlist = NULL;
+  char triswitches[] = "vz";
+  triangulate(triswitches, &in, &out, NULL);
+  for (int i = 0; i < out.numberofpoints; i++) {
+      std::cout << out.pointlist[2*i] << " " << out.pointlist[2*i+1] << std::endl;
+  }
+  
 }
 
 void RegularMesh::generateCells()

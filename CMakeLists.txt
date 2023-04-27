@@ -10,8 +10,9 @@ option(BUILD_TESTS "Build tests for Regional Mesh Gen" OFF)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}-L/glade/u/apps/ch/opt/netcdf/4.8.1/gnu/10.1.0/lib -lnetcdf_c++4 -lnetcdf -I/glade/u/apps/ch/opt/netcdf/4.8.1/gnu/10.1.0/include -fPIC")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I/glade/u/apps/ch/opt/netcdf/4.8.1/gnu/10.1.0/include -fPIC")
-
-add_subdirectory(${PROJECT_SOURCE_DIR}/tests)
+if(BUILD_TESTS)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/tests)
+endif(BUILD_TESTS)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src)
 add_subdirectory(${PROJECT_SOURCE_DIR}/app)
 add_subdirectory(${PROJECT_SOURCE_DIR}/libs/triangle)
