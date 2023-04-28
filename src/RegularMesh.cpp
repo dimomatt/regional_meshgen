@@ -24,17 +24,13 @@ RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
 void RegularMesh::generateVoronoi()
 {
   struct triangulateio in, mid, out, vorout;
-  
-      std::vector<REAL> input_vertices = {
-                0.0, 0.0,
-                        0.0, 1.0,
-                                1.0, 0.0,
-                                        1.0, 1.0
-                                              };
-  
-  in.numberofpoints = 4;
+  std::vector<REAL> input_vertices;
+  for (const auto point : this->cellsOnPlane){
+    input_vertices.push_back(point.x);
+    input_vertices.push_back(point.y);
+  } 
+  in.numberofpoints = this->cellsOnPlane.size();
   in.pointlist = &input_vertices[0];
-  //in.numberofpoints = this->vertices.size();
   in.numberofpointattributes = 0;
   in.pointmarkerlist = NULL;
   in.numberofsegments = 0;
@@ -57,13 +53,10 @@ void RegularMesh::generateVoronoi()
   vorout.pointlist = NULL;
   vorout.edgelist = NULL;
   vorout.normlist = NULL;
-  char triswitches[] = "vz";
+  char triswitches[] = "z";
   triangulate(triswitches, &in, &out, &vorout);
-  std::cout << "Done Triangulating" << std::endl;
-  //for (int i = 0; i < out.numberofpoints; i++) {
-  //    std::cout << out.pointlist[2*i] << " " << out.pointlist[2*i+1] << std::endl;
-  //}
-  
+  std::cout << "Done Triangulating" << std::endl; 
+  }
 }
 
 void RegularMesh::generateCells()
