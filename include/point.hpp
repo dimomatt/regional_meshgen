@@ -16,9 +16,8 @@ struct sphericalPoint
   float r, phi, theta;
 };
 
-struct fkaeSpherical
+struct latLonPoint
 {
-  float phi, theta;
+  float lat, lon;
 };
-
 #endif //POINT_H
