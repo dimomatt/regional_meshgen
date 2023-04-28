@@ -56,7 +56,7 @@ void RegularMesh::generateVoronoi()
   char triswitches[] = "z";
   triangulate(triswitches, &in, &out, &vorout);
   std::cout << "Done Triangulating" << std::endl; 
-  }
+  
 }
 
 void RegularMesh::generateCells()
