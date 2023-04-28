@@ -11,12 +11,12 @@ struct Point2D
   float x, y;
 };
 
-struct sphericalPoint
+struct SphericalPoint
 {
   float r, phi, theta;
 };
 
-struct latLonPoint
+struct LatLonPoint
 {
   float lat, lon;
 };

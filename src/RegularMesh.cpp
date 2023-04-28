@@ -1,4 +1,5 @@
 #include "RegularMesh.hpp"
+#include "helpers.hpp"
 #include <vector>
 #include <string>
 #include <cmath>

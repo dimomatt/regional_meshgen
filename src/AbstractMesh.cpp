@@ -34,6 +34,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   netCDF::NcVar nEdgesOnCell = outFile.addVar("nEdgesOnCell", netCDF::ncInt, nCells);
   netCDF::NcVar areaCell = outFile.addVar("areaCell", netCDF::ncDouble, nCells);
   netCDF::NcVar meshDensity = outFile.addVar("meshDensity", netCDF::ncDouble, nCells);
+  
   // numEdges 
   netCDF::NcVar indexToEdgeID = outFile.addVar("indexToEdgeID", netCDF::ncInt, nEdges); 
   netCDF::NcVar xEdge = outFile.addVar("xEdge", netCDF::ncDouble, nEdges); 
@@ -45,6 +46,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   netCDF::NcVar dvEdge = outFile.addVar("dvEdge", netCDF::ncDouble, nEdges); 
   netCDF::NcVar dcEdge = outFile.addVar("dcEdge", netCDF::ncDouble, nEdges); 
   netCDF::NcVar angleEdge = outFile.addVar("angleEdge", netCDF::ncDouble, nEdges); 
+  
   // nVertices
   netCDF::NcVar indexToVertexID = outFile.addVar("indexToVertexID", netCDF::ncInt, nVertices); 
   netCDF::NcVar xVertex = outFile.addVar("xVertex", netCDF::ncDouble, nVertices); 
@@ -53,17 +55,21 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   netCDF::NcVar latVertex = outFile.addVar("latVertex", netCDF::ncDouble, nVertices); 
   netCDF::NcVar lonVertex = outFile.addVar("lonVertex", netCDF::ncDouble, nVertices); 
   netCDF::NcVar areaTriangle = outFile.addVar("areaTriangle", netCDF::ncDouble, nVertices); 
+  
   // nCells, maxEdges
   netCDF::NcVar cellsOnCell = outFile.addVar("cellsOnCell", netCDF::ncInt, {nCells, maxEdges});
   netCDF::NcVar edgesOnCell = outFile.addVar("edgesOnCell", netCDF::ncInt, {nCells, maxEdges});
   netCDF::NcVar verticesOnCell = outFile.addVar("verticesOnCell", netCDF::ncInt, {nCells, maxEdges});
+  
   // nEdges, TWO
   netCDF::NcVar cellsOnEdge = outFile.addVar("cellsOnEdge", netCDF::ncInt, {nEdges, TWO});
   netCDF::NcVar VerticesOnEdge = outFile.addVar("verticesOnEdge", netCDF::ncInt, {nEdges, TWO});
+  
   // nEdges, maxEdges2
   netCDF::NcVar edgesOnEdge = outFile.addVar("edgesOnEdge", netCDF::ncInt, {nEdges, maxEdges2});
   netCDF::NcVar weightsOnEdge = outFile.addVar("weightsOnEdge", netCDF::ncDouble,
                                              {nEdges, maxEdges2});
+  
   // nVertices, vertexDegree
   netCDF::NcVar edgesOnVertex = outFile.addVar("edgesOnVertex", netCDF::ncInt,
                                              {nVertices, vertexDegree});

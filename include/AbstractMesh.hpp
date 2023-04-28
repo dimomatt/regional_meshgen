@@ -37,9 +37,9 @@ class AbstractMesh
     std::vector<CartesianPoint> cells;
     std::vector<CartesianPoint> edges;
     std::vector<CartesianPoint> vertices;
-    std::vector<latLonPoint> latLonCells;
-    std::vector<latLonPoint> latLonEdges;
-    std::vector<latLonPoint> latLonVertices; 
+    std::vector<LatLonPoint> latLonCells;
+    std::vector<LatLonPoint> latLonEdges;
+    std::vector<LatLonPoint> latLonVertices; 
     std::vector<double> areaCell;
     std::vector<double> areaTriangle;
     std::vector<double> meshDensity;
