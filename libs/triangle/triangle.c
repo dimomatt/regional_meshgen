@@ -357,6 +357,11 @@
 #include "triangle.h"
 #endif /* TRILIBRARY */
 
+/* Fix something that's maybe happening */
+#ifndef ANSI_DECLARATORS
+#define ANSI_DECLARATORS
+#endif
+
 /* A few forward declarations.                                               */
 
 #ifndef TRILIBRARY

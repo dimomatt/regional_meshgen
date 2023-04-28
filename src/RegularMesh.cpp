@@ -53,11 +53,16 @@ void RegularMesh::generateVoronoi()
   out.segmentmarkerlist = NULL;
   out.edgemarkerlist = NULL;
   out.normlist = NULL;
+
+  vorout.pointlist = NULL;
+  vorout.edgelist = NULL;
+  vorout.normlist = NULL;
   char triswitches[] = "vz";
   triangulate(triswitches, &in, &out, &vorout);
-  for (int i = 0; i < out.numberofpoints; i++) {
-      std::cout << out.pointlist[2*i] << " " << out.pointlist[2*i+1] << std::endl;
-  }
+  std::cout << "Done Triangulating" << std::endl;
+  //for (int i = 0; i < out.numberofpoints; i++) {
+  //    std::cout << out.pointlist[2*i] << " " << out.pointlist[2*i+1] << std::endl;
+  //}
   
 }
 
