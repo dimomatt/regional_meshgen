@@ -1,7 +1,7 @@
 #include "AbstractMesh.hpp"
 #include <string>
 #include <netcdf>
-
+#include <algorithm>
 
 void AbstractMesh::writeNetCDF(const std::string& filename)
 {
@@ -9,7 +9,16 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
    * Create File
    */
   netCDF::NcFile outFile("out.nc", netCDF::NcFile::replace);
-  
+  for (auto vec : this->weightsOnEdge){
+    std::fill(vec.begin(), vec.end(), 0.1);
+  }
+  for (auto vec : this->weightsOnEdge){
+    for (auto item : vec) {
+      std::cout << item;
+    }
+    std::cout << std::endl;
+  }
+
   /*
    * Define Dimensions
    */
@@ -75,9 +84,30 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
                                              {nVertices, vertexDegree});
   netCDF::NcVar cellsOnVertex = outFile.addVar("cellsOnVertex", netCDF::ncInt,
                                              {nVertices, vertexDegree});
-  netCDF::NcVar KiteAreasOnVertex = outFile.addVar("kiteAreasOnVertex", netCDF::ncInt,
+  netCDF::NcVar kiteAreasOnVertex = outFile.addVar("kiteAreasOnVertex", netCDF::ncInt,
                                                  {nVertices, vertexDegree});
   
+  // Write variables
+  areaCell.putVar(this->areaCell.data());
+  areaTriangle.putVar(this->areaTriangle.data());
+  meshDensity.putVar(this->meshDensity.data());
+  dvEdge.putVar(this->dvEdge.data());
+  dcEdge.putVar(this->dcEdge.data());
+  angleEdge.putVar(this->angleEdge.data());
+  kiteAreasOnVertex.putVar(this->kiteAreasOnVertex.data());
+  weightsOnEdge.putVar(this->weightsOnEdge.data());
+
+  // Write Connectivity Fields;
+  nEdgesOnCell.putVar(this->nEdgesOnCell.data());
+  nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
+  indexToCellID.putVar(this->indexToCellID.data());
+  indexToEdgeID.putVar(this->indexToEdgeID.data());
+  indexToVertexID.putVar(this->indexToVertexID.data());
+  cellsOnCell.putVar(this->cellsOnCell.data());
+  edgesOnCell.putVar(this->edgesOnCell.data());
+  verticesOnCell.putVar(this->verticesOnCell.data());
+  cellsOnVertex.putVar(this->cellsOnVertex.data());
+  edgesOnVertex.putVar(this->edgesOnVertex.data());
   
   outFile.close();
 }

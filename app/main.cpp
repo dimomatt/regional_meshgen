@@ -1,21 +1,27 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "StereographicProjector.hpp"
 #include "RegularMesh.hpp"
 #include "point.hpp"
 
+// In case we want to add other projections
+enum class ProjectorType { STEREOGRAPHIC };
+
+// Hold on to the mesh type
+enum class MeshType { REGULAR };
+
+
 int main(int argc, const char **argv)
-{
-  std::ofstream file;
-  file.open("out.txt");
+{  
+  // Parse Args
+  std::string configFilename;
+  bool verbose = false;
+  
   RegularMesh mesh = RegularMesh(10, 10, 1.0);
   StereographicProjector projector;
   mesh.generateCells();
   mesh.generateVoronoi();
-  for (Point2D  i : mesh.cellsOnPlane){
-    file << i.x << ", " << i.y << "\n";  
-  }
-  file.close();
-  
   mesh.writeNetCDF(std::string("out.nc"));
+
 }
