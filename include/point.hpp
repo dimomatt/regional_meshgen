@@ -3,21 +3,21 @@
 struct CartesianPoint
 {
   /*! Represents a point in cartesian space */
-  float x, y, z;
+  double x, y, z;
 };
 
 struct Point2D
 {
-  float x, y;
+  double x, y;
 };
 
 struct SphericalPoint
 {
-  float r, phi, theta;
+  double r, phi, theta;
 };
 
 struct LatLonPoint
 {
-  float lat, lon;
+  double lat, lon;
 };
 #endif //POINT_H

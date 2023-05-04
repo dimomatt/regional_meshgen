@@ -55,12 +55,17 @@ void RegularMesh::generateVoronoi()
   vorout.pointlist = NULL;
   vorout.edgelist = NULL;
   vorout.normlist = NULL;
-  char triswitches[] = "z";
+  char triswitches[] = "zvn";
   triangulate(triswitches, &in, &out, &vorout);
   std::cout << "Done Triangulating" << std::endl; 
-  std::set<std::pair<double, double>> voronoiVertices;
   for (int i = 0; i < vorout.numberofedges; i++) {
-    std::cout << "hello" << std::endl;
+    auto one = vorout.edgelist[i * 2];
+    auto two = vorout.edgelist[i * 2 + 1];
+    Point2D vertexOne = {vorout.pointlist[one * 2], vorout.pointlist[one * 2 + 1]}; 
+    Point2D vertexTwo = {vorout.pointlist[two * 2], vorout.pointlist[two * 2 + 1]};
+    
+    this->verticesOnPlane.push_back(vertexOne);
+    this->verticesOnPlane.push_back(vertexTwo);
   }
 }
 

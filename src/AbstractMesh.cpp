@@ -9,16 +9,6 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
    * Create File
    */
   netCDF::NcFile outFile("out.nc", netCDF::NcFile::replace);
-  for (auto vec : this->weightsOnEdge){
-    std::fill(vec.begin(), vec.end(), 0.1);
-  }
-  for (auto vec : this->weightsOnEdge){
-    for (auto item : vec) {
-      std::cout << item;
-    }
-    std::cout << std::endl;
-  }
-
   /*
    * Define Dimensions
    */
@@ -87,7 +77,9 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   netCDF::NcVar kiteAreasOnVertex = outFile.addVar("kiteAreasOnVertex", netCDF::ncInt,
                                                  {nVertices, vertexDegree});
   
-  // Write variables
+  
+  // Write variable
+  try {
   areaCell.putVar(this->areaCell.data());
   areaTriangle.putVar(this->areaTriangle.data());
   meshDensity.putVar(this->meshDensity.data());
@@ -96,7 +88,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   angleEdge.putVar(this->angleEdge.data());
   kiteAreasOnVertex.putVar(this->kiteAreasOnVertex.data());
   weightsOnEdge.putVar(this->weightsOnEdge.data());
-
+  
   // Write Connectivity Fields;
   nEdgesOnCell.putVar(this->nEdgesOnCell.data());
   nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
@@ -108,6 +100,10 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   verticesOnCell.putVar(this->verticesOnCell.data());
   cellsOnVertex.putVar(this->cellsOnVertex.data());
   edgesOnVertex.putVar(this->edgesOnVertex.data());
+  } catch (netCDF::exceptions::NcException& e) {
+    std::cerr << "NetCDF exception: " << e.what() << std::endl;
+  }
   
   outFile.close();
+  std::cout << "here" << std::endl;
 }
