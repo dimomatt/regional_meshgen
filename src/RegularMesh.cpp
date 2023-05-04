@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <set>
 #include <netcdf>
 extern "C" {
 #include "triangle.h"
@@ -57,7 +58,10 @@ void RegularMesh::generateVoronoi()
   char triswitches[] = "z";
   triangulate(triswitches, &in, &out, &vorout);
   std::cout << "Done Triangulating" << std::endl; 
-  
+  std::set<std::pair<double, double>> voronoiVertices;
+  for (int i = 0; i < vorout.numberofedges; i++) {
+    std::cout << "hello" << std::endl;
+  }
 }
 
 void RegularMesh::generateCells()
