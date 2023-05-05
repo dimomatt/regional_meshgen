@@ -80,30 +80,31 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   
   // Write variable
   try {
-  areaCell.putVar(this->areaCell.data());
-  areaTriangle.putVar(this->areaTriangle.data());
-  meshDensity.putVar(this->meshDensity.data());
-  dvEdge.putVar(this->dvEdge.data());
-  dcEdge.putVar(this->dcEdge.data());
-  angleEdge.putVar(this->angleEdge.data());
-  kiteAreasOnVertex.putVar(this->kiteAreasOnVertex.data());
-  weightsOnEdge.putVar(this->weightsOnEdge.data());
+  //areaCell.putVar(this->areaCell.data());
+  //areaTriangle.putVar(this->areaTriangle.data());
+  //meshDensity.putVar(this->meshDensity.data());
+  //dvEdge.putVar(this->dvEdge.data());
+  //dcEdge.putVar(this->dcEdge.data());
+  //angleEdge.putVar(this->angleEdge.data());
+  //kiteAreasOnVertex.putVar(this->kiteAreasOnVertex.data());
+  //weightsOnEdge.putVar(this->weightsOnEdge.data());
   
   // Write Connectivity Fields;
-  nEdgesOnCell.putVar(this->nEdgesOnCell.data());
-  nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
-  indexToCellID.putVar(this->indexToCellID.data());
-  indexToEdgeID.putVar(this->indexToEdgeID.data());
-  indexToVertexID.putVar(this->indexToVertexID.data());
-  cellsOnCell.putVar(this->cellsOnCell.data());
-  edgesOnCell.putVar(this->edgesOnCell.data());
-  verticesOnCell.putVar(this->verticesOnCell.data());
-  cellsOnVertex.putVar(this->cellsOnVertex.data());
-  edgesOnVertex.putVar(this->edgesOnVertex.data());
+  //nEdgesOnCell.putVar(this->nEdgesOnCell.data());
+  //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
+  //indexToCellID.putVar(this->indexToCellID.data());
+  //indexToEdgeID.putVar(this->indexToEdgeID.data());
+  //indexToVertexID.putVar(this->indexToVertexID.data());
+  //cellsOnCell.putVar(this->cellsOnCell.data());
+  //edgesOnCell.putVar(this->edgesOnCell.data());
+  //verticesOnCell.putVar(this->verticesOnCell.data());
+  //cellsOnVertex.putVar(this->cellsOnVertex.data());
+  //edgesOnVertex.putVar(this->edgesOnVertex.data());
   } catch (netCDF::exceptions::NcException& e) {
     std::cerr << "NetCDF exception: " << e.what() << std::endl;
+    outFile.close();
+    return;
   }
   
   outFile.close();
-  std::cout << "here" << std::endl;
 }

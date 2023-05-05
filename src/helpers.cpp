@@ -8,7 +8,24 @@ Point2D circumcenter2D(Point2D &a, Point2D &b, Point2D &c){
   outPoint.y = ((a.x * a.x + a.y * a.y) * (c.x - b.x) + (b.x * b.x + b.y * b.y) * (a.x - c.x)
                + (c.x * c.x + c.y * c.y) * (b.x - a.x)) / d;
   return outPoint;
-} 
+}
+
+Point2D midpoint(Point2D &a, Point2D &b){
+  Point2D midpoint;
+  midpoint.x = (a.x + b.x) / 2.0;
+  midpoint.y = (a.y + b.y) / 2.0;
+  return midpoint;
+}
+
+double distanceSquared(Point2D &a, Point2D &b){
+  double dx = b.x - a.x;
+  double dy = b.y - a.y;
+  return (dx + dy);
+}
+
+double distance(Point2D &a, Point2D &b){
+  return sqrt(distanceSquared(a, b));
+}
 
 double kiteArea(double p, double q){
   return (p * q ) / 2;
