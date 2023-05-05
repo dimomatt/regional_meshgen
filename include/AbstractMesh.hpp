@@ -12,20 +12,20 @@ class AbstractMesh
     /*
      *  MESH DIMENSIONS
      */
-    int maxEdges;
-    int maxEdges2;
-    int vertexDegree;
-    int nCells;
-    int nEdges;
-    int nVertices;
+    size_t maxEdges;
+    size_t maxEdges2;
+    size_t vertexDegree;
+    size_t nCells;
+    size_t nEdges;
+    size_t nVertices;
 
   public:
 
     /*
      * GENERATING OPTIONS
      */
-    int rows;
-    int cols;
+    size_t rows;
+    size_t cols;
     int resolution;
     
     /*

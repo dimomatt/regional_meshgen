@@ -18,7 +18,7 @@ int main(int argc, const char **argv)
   std::string configFilename;
   bool verbose = false;
   
-  RegularMesh mesh = RegularMesh(10, 10, 1.0);
+  RegularMesh mesh = RegularMesh(1000, 1000, 1.0);
   StereographicProjector projector;
   mesh.generateCells();
   mesh.generateVoronoi();

@@ -2,9 +2,19 @@
 #define HELPERS_H
 #include "point.hpp"
 
-Point2D circumcenter2D(Point2D &a, Point2D &b, Point2D &c);
+Point2D circumcenter2D(Point2D &a,
+                       Point2D &b,
+                       Point2D &c);
 
-Point2D circumcenter2D(LatLonPoint &a, LatLonPoint &b, LatLonPoint &c);
+Point2D circumcenter2D(LatLonPoint &a,
+                       LatLonPoint &b,
+                       LatLonPoint &c);
+
+Point2D midpoint(Point2D &a, Point2D &b);
+
+double distanceSquared(Point2D &a, Point2D &b);
+
+double distance(Point2D &a, Point2D &b);
 
 double kiteArea(double p, double q);
 

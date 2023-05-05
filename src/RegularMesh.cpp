@@ -74,18 +74,16 @@ void RegularMesh::generateVoronoi()
                          vorout.pointlist[one * 2 + 1]}; 
     Point2D vertexTwo = {vorout.pointlist[two * 2],
                          vorout.pointlist[two * 2 + 1]};
-    /*
-    The edge endpoints are the circumcenter of the triangles
-     as well as the vertices of the cells
-    */
+    
+    //The edge endpoints are the circumcenter of the triangles
+    // as well as the vertices of the cells
     this->verticesOnPlane.push_back(vertexOne);
     this->verticesOnPlane.push_back(vertexTwo);
+    
     // The midpoint of each edge is stored as the "edge"
     this->edgesOnPlane.push_back(midpoint(vertexOne,
                                           vertexTwo));
-  }
-  
-  
+  } 
 }
 
 
