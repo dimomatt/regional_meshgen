@@ -25,69 +25,21 @@ RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
 
 void RegularMesh::generateVoronoi()
 {
-  struct triangulateio in, mid, out, vorout;
-  std::vector<REAL> input_vertices;
-  
-  // Transform the points in to the preferred triangle format
-  for (const auto point : this->cellsOnPlane){
-    input_vertices.push_back(point.x);
-    input_vertices.push_back(point.y);
-  }
-
-  // Initialize a bunch of things that triangulate needs
-  in.numberofpoints = this->cellsOnPlane.size();
-  in.pointlist = &input_vertices[0];
-  in.numberofpointattributes = 0;
-  in.pointmarkerlist = NULL;
-  in.numberofsegments = 0;
-  in.segmentlist = NULL;
-  in.segmentmarkerlist = NULL;
-  out.pointmarkerlist = NULL;
-  out.segmentlist = NULL;
-  out.segmentmarkerlist = NULL;  
-  out.pointlist = NULL;
-  out.trianglelist = NULL;
-  out.triangleattributelist = NULL;
-  out.trianglearealist = NULL;
-  out.neighborlist = NULL;
-  out.segmentlist = NULL;
-  out.segmentmarkerlist = NULL;
-  out.edgemarkerlist = NULL;
-  out.normlist = NULL;
-  vorout.pointlist = NULL;
-  vorout.edgelist = NULL;
-  vorout.normlist = NULL;
-  
-  // Index from zero, generate voronoi diagram, and a neighbor list
-  char triswitches[] = "zvn";
-
-  // Run the actual triangulate program
-  triangulate(triswitches, &in, &out, &vorout);
-  std::cout << "Done Triangulating" << std::endl;
-  
-  // Save the Voronoi edges 
-  for (int i = 0; i < vorout.numberofedges; i++) {
-    auto one = vorout.edgelist[i * 2];
-    auto two = vorout.edgelist[i * 2 + 1];
-    if (two == -1){
-      //continue;
+  double cornerRadius = this->resolution/2.0;
+  for (auto point : this->cellsOnPlane){
+    for (int k = 0; k < 6; k++){
+      Point2D vertex;
+      double angle = k * M_PI / 3.0;
+      vertex.x = point.x + cornerRadius * cos(angle);
+      vertex.y = point.y + cornerRadius * sin(angle);
+      this->verticesOnPlane.push_back(vertex);
+      // Get the edge every other point
+      if (k % 2 == 1){
+        this->edgesOnPlane.push_back(midpoint(this->verticesOnPlane.back(),
+                                              vertex));
+      }
     }
-    // Make points for each end of the edge and save them
-    Point2D vertexOne = {vorout.pointlist[one * 2],
-                         vorout.pointlist[one * 2 + 1]}; 
-    Point2D vertexTwo = {vorout.pointlist[two * 2],
-                         vorout.pointlist[two * 2 + 1]};
-    
-    //The edge endpoints are the circumcenter of the triangles
-    // as well as the vertices of the cells
-    this->verticesOnPlane.push_back(vertexOne);
-    this->verticesOnPlane.push_back(vertexTwo);
-    // The midpoint of each edge is stored as the "edge"
-    this->edgesOnPlane.push_back(midpoint(vertexOne,
-                                          vertexTwo));
   }
-
-    std::cout << this->verticesOnPlane.size() << std::endl; 
 }
 
 
