@@ -69,6 +69,9 @@ void RegularMesh::generateVoronoi()
   for (int i = 0; i < vorout.numberofedges; i++) {
     auto one = vorout.edgelist[i * 2];
     auto two = vorout.edgelist[i * 2 + 1];
+    if (two == -1){
+      //continue;
+    }
     // Make points for each end of the edge and save them
     Point2D vertexOne = {vorout.pointlist[one * 2],
                          vorout.pointlist[one * 2 + 1]}; 
@@ -79,11 +82,12 @@ void RegularMesh::generateVoronoi()
     // as well as the vertices of the cells
     this->verticesOnPlane.push_back(vertexOne);
     this->verticesOnPlane.push_back(vertexTwo);
-    
     // The midpoint of each edge is stored as the "edge"
     this->edgesOnPlane.push_back(midpoint(vertexOne,
                                           vertexTwo));
-  } 
+  }
+
+    std::cout << this->verticesOnPlane.size() << std::endl; 
 }
 
 
