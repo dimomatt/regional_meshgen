@@ -4,6 +4,8 @@
 #include <string>
 #include <cmath>
 #include <set>
+#include <algorithm>
+#include <map>
 #include <netcdf>
 extern "C" {
 #include "triangle.h"
@@ -64,33 +66,30 @@ void RegularMesh::generateVoronoi()
   // Run the actual triangulate program
   triangulate(triswitches, &in, &out, &vorout);
   std::cout << "Done Triangulating" << std::endl;
-  
-  // Save the Voronoi edges 
-  for (int i = 0; i < vorout.numberofedges; i++) {
-    auto one = vorout.edgelist[i * 2];
-    auto two = vorout.edgelist[i * 2 + 1];
-    if (two == -1){
-      //continue;
-    }
-    // Make points for each end of the edge and save them
-    Point2D vertexOne = {vorout.pointlist[one * 2],
-                         vorout.pointlist[one * 2 + 1]}; 
-    Point2D vertexTwo = {vorout.pointlist[two * 2],
-                         vorout.pointlist[two * 2 + 1]};
-    
-    //The edge endpoints are the circumcenter of the triangles
-    // as well as the vertices of the cells
-    this->verticesOnPlane.push_back(vertexOne);
-    this->verticesOnPlane.push_back(vertexTwo);
-    // The midpoint of each edge is stored as the "edge"
-    this->edgesOnPlane.push_back(midpoint(vertexOne,
-                                          vertexTwo));
+  std::cout << "there are " << out.numberoftriangles << " triangles" << std::endl;
+  std::vector<std::set<int>> sharedVertices;
+  sharedVertices.resize(in.numberofpoints);
+  for (int i=0; i < out.numberoftriangles; i++){
+    int a = out.trianglelist[i * 3];
+    int b = out.trianglelist[i * 3 + 1];
+    int c = out.trianglelist[i * 3 + 2];
+    sharedVertices[a].insert(b);
+    sharedVertices[a].insert(c);
+    sharedVertices[b].insert(a);
+    sharedVertices[b].insert(c);
+    sharedVertices[c].insert(a);
+    sharedVertices[c].insert(b);
   }
-
-    std::cout << this->verticesOnPlane.size() << std::endl; 
+  this->cellsOnCell = convertSetsToVectors(sharedVertices);
 }
 
-
+void RegularMesh::projectCells(StereographicProjector& projector){
+  this->cells.resize(this->cellsOnPlane.size());
+  std::transform(this->cellsOnPlane.begin(),
+                 this->cellsOnPlane.end(),
+                 this->cells.begin(),
+                 [&projector](Point2D x){ return projector.projectToSphere(x); });
+}
 
 void RegularMesh::generateCells()
 {

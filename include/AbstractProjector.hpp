@@ -4,7 +4,8 @@
 class AbstractProjector
 {
   public:
-    
+    double radius = 1; 
+
     // Project a single point from a plane to a globe
     virtual CartesianPoint projectToSphere(Point2D  &point) = 0;
 

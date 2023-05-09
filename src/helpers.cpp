@@ -36,3 +36,12 @@ double kiteArea(double a, double b, double theta){
 }
 
 
+std::vector<std::vector<int>> convertSetsToVectors(
+    std::vector<std::set<int>> &input){
+  std::vector<std::vector<int>> output;
+  output.resize(input.size());
+  for (size_t i = 0; i < input.size(); i++){
+    output[i] = std::vector<int>(input[i].begin(), input[i].end());
+  }
+  return output;
+}

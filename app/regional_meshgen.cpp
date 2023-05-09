@@ -19,7 +19,7 @@ int main(int argc, const char **argv)
   bool verbose = false;
   
   RegularMesh mesh = RegularMesh(1000, 1000, 1.0);
-  StereographicProjector projector;
+  StereographicProjector projector(6378.14);
   mesh.generateCells();
   mesh.generateVoronoi();
   mesh.writeNetCDF(std::string("out.nc"));
