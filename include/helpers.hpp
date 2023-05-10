@@ -12,15 +12,17 @@ Point2D circumcenter2D(LatLonPoint &a,
                        LatLonPoint &b,
                        LatLonPoint &c);
 
-Point2D midpoint(Point2D &a, Point2D &b);
+Point2D midpoint(const Point2D &a, const Point2D &b);
 
-double distanceSquared(Point2D &a, Point2D &b);
+double angle(const Point2D& a, const Point2D &b);
 
-double distance(Point2D &a, Point2D &b);
+double distanceSquared(const Point2D &a, const Point2D &b);
 
-double kiteArea(double p, double q);
+double distance(const Point2D &a, const Point2D &b);
 
-double kiteArea(double a, double b, double theta);
+double kiteArea(const double p, const double q);
+
+double kiteArea(const double a, const double b, const double theta);
 
 // This really should be templated
 std::vector<std::vector<int>> convertSetsToVectors(
