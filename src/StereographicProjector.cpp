@@ -9,7 +9,7 @@ StereographicProjector::StereographicProjector(double radius){
 }
 
 CartesianPoint StereographicProjector::projectToSphere(Point2D &point)
-{
+const {
   CartesianPoint outPoint;
   
   float denominator = ( this->radius * this->radius + 
@@ -26,7 +26,7 @@ CartesianPoint StereographicProjector::projectToSphere(Point2D &point)
 }; // StereographicProjector::projectToSphere
 
 Point2D StereographicProjector::projectToPlane(CartesianPoint &point)
-{
+const {
   Point2D outPoint;
   outPoint.x = this->radius * (point.x / (this->radius - point.z));
   outPoint.y = this->radius * (point.y / (this->radius - point.z));

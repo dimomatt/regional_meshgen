@@ -25,7 +25,7 @@ RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
   /* TODO: Reserve the connectivity arrays for performance */
 }
 
-void RegularMesh::generateVoronoi()
+void RegularMesh::generateDelaunay()
 {
   struct triangulateio in, mid, out, vorout;
   std::vector<REAL> input_vertices;
@@ -83,7 +83,7 @@ void RegularMesh::generateVoronoi()
   this->cellsOnCell = convertSetsToVectors(sharedVertices);
 }
 
-void RegularMesh::projectCells(StereographicProjector& projector){
+void RegularMesh::projectCells(AbstractProjector& projector){
   this->cells.resize(this->cellsOnPlane.size());
   std::transform(this->cellsOnPlane.begin(),
                  this->cellsOnPlane.end(),
@@ -104,4 +104,10 @@ void RegularMesh::generateCells()
     }
   }
 }
+
+void RegularMesh::generateVoronoi()
+{
+  return;
+}
+
 

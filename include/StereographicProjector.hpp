@@ -7,9 +7,9 @@ class StereographicProjector : public AbstractProjector
   public:
   StereographicProjector(double radius);
   
-  CartesianPoint projectToSphere(Point2D &point);
+  CartesianPoint projectToSphere(Point2D &point) const override;
 
-  Point2D projectToPlane(CartesianPoint &point);
+  Point2D projectToPlane(CartesianPoint &point) const override;
 };
 
 #endif

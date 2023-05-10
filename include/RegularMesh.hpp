@@ -13,11 +13,13 @@ class RegularMesh : public AbstractMesh
     /*! Generate the initial grid */
     void generateCells();
 
+    void generateDelaunay();
+
     /*! Get the voronoi diagram of the mesh */
     void generateVoronoi();
     
     /*! Project Cells down to a sphere using a projector */
-    void projectCells(StereographicProjector& projector);
+    void projectCells(AbstractProjector& projector);
 };
 
 #endif

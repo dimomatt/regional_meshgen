@@ -21,7 +21,9 @@ int main(int argc, const char **argv)
   RegularMesh mesh = RegularMesh(1000, 1000, 1.0);
   StereographicProjector projector(6378.14);
   mesh.generateCells();
+  mesh.generateDelaunay();
   mesh.generateVoronoi();
+  mesh.projectCells(projector);
   mesh.writeNetCDF(std::string("out.nc"));
 
 }

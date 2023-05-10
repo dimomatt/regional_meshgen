@@ -45,3 +45,7 @@ std::vector<std::vector<int>> convertSetsToVectors(
   }
   return output;
 }
+
+double angle(const Point2D& a, const Point2D&b){
+  return std::atan2(a.y - b.y, a.x - b.x);
+}
