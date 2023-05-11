@@ -22,12 +22,11 @@ RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
   /* This isn't perfect, but I just want to get something down for now*/
   this->vertices.reserve(2 * this->rows * this->cols);
   this->edges.reserve(2 * this->rows * this->cols);
-  /* TODO: Reserve the connectivity arrays for performance */
 }
 
 void RegularMesh::generateDelaunay()
 {
-  struct triangulateio in, mid, out, vorout;
+  struct triangulateio in, out, vorout;
   std::vector<REAL> input_vertices;
   
   // Transform the points in to the preferred triangle format
@@ -56,19 +55,22 @@ void RegularMesh::generateDelaunay()
   out.segmentmarkerlist = NULL;
   out.edgemarkerlist = NULL;
   out.normlist = NULL;
-  vorout.pointlist = NULL;
-  vorout.edgelist = NULL;
-  vorout.normlist = NULL;
   
-  // Index from zero, generate voronoi diagram, and a neighbor list
-  char triswitches[] = "zvn";
+  // Index from zero, generate neighbor list, stay quiet
+  char triswitches[] = "znQ";
 
   // Run the actual triangulate program
   triangulate(triswitches, &in, &out, &vorout);
   std::cout << "Done Triangulating" << std::endl;
   std::cout << "there are " << out.numberoftriangles << " triangles" << std::endl;
+  
+  // Start populating some fields 
   std::vector<std::set<int>> sharedVertices;
+  std::vector<std::set<int>> verticesOnCell;
+  std::vector<std::set<int>> cellsOnVertex;
   sharedVertices.resize(in.numberofpoints);
+  verticesOnCell.resize(in.numberofpoints);
+  cellsOnVertex.resize(out.numberoftriangles);
   for (int i=0; i < out.numberoftriangles; i++){
     int a = out.trianglelist[i * 3];
     int b = out.trianglelist[i * 3 + 1];
@@ -79,16 +81,34 @@ void RegularMesh::generateDelaunay()
     sharedVertices[b].insert(c);
     sharedVertices[c].insert(a);
     sharedVertices[c].insert(b);
+    
+    // get cellsOnVertex
+    cellsOnVertex[i].insert(a);
+    cellsOnVertex[i].insert(b);
+    cellsOnVertex[i].insert(c);
+
+    // Also populate Vertices On Cell
+    verticesOnCell[a].insert(i);
+    verticesOnCell[b].insert(i);
+    verticesOnCell[c].insert(i);
+  
   }
+  std::cout << "Saving cellsOnCell" << std::endl;
   this->cellsOnCell = convertSetsToVectors(sharedVertices);
+  std::cout << "Saving verticesOnCell" << std::endl;
+  this->verticesOnCell = convertSetsToVectors(verticesOnCell);
+  std::cout << "Saving cellsOnVertex" << std::endl;
+  this->cellsOnVertex = convertSetsToVectors(cellsOnVertex);
 }
+
 
 void RegularMesh::projectCells(AbstractProjector& projector){
   this->cells.resize(this->cellsOnPlane.size());
   std::transform(this->cellsOnPlane.begin(),
                  this->cellsOnPlane.end(),
                  this->cells.begin(),
-                 [&projector](Point2D x){ return projector.projectToSphere(x); });
+                 [&projector](Point2D x){ 
+                 return projector.projectToSphere(x); });
 }
 
 void RegularMesh::generateCells()
@@ -105,9 +125,6 @@ void RegularMesh::generateCells()
   }
 }
 
-void RegularMesh::generateVoronoi()
-{
+void RegularMesh::generateVoronoi(){
   return;
 }
-
-
