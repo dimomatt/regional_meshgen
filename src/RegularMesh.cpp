@@ -18,6 +18,7 @@ RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
   this->rows = rows_;
   this->cols = cols_;
   this->cells.reserve(this->rows * this->cols);
+  this->nCells = (this->rows * this->cols);
   this->cellsOnPlane.reserve(this->rows * this->cols);
   /* This isn't perfect, but I just want to get something down for now*/
   this->vertices.reserve(2 * this->rows * this->cols);

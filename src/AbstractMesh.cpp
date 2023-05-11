@@ -95,10 +95,10 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   //indexToCellID.putVar(this->indexToCellID.data());
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
   //indexToVertexID.putVar(this->indexToVertexID.data());
-  //cellsOnCell.putVar(this->cellsOnCell.data());
+  cellsOnCell.putVar(this->cellsOnCell.data());
   //edgesOnCell.putVar(this->edgesOnCell.data());
-  //verticesOnCell.putVar(this->verticesOnCell.data());
-  //cellsOnVertex.putVar(this->cellsOnVertex.data());
+  verticesOnCell.putVar(this->verticesOnCell.data());
+  cellsOnVertex.putVar(this->cellsOnVertex.data());
   //edgesOnVertex.putVar(this->edgesOnVertex.data());
   } catch (netCDF::exceptions::NcException& e) {
     std::cerr << "NetCDF exception: " << e.what() << std::endl;

@@ -7,7 +7,7 @@
 
 class AbstractMesh
 {
-  private:
+  protected:
 
     /*
      *  MESH DIMENSIONS
