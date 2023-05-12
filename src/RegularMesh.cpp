@@ -14,11 +14,19 @@ extern "C" {
 
 RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
 {
+  // Set some variables
   this->resolution = resolution_;
   this->rows = rows_;
   this->cols = cols_;
-  this->cells.reserve(this->rows * this->cols);
   this->nCells = (this->rows * this->cols);
+
+  // We know this because it's a hexagonal grid
+  this->vertexDegree = 3;
+  this->maxEdges = 6;
+  this->maxEdges2 = 12;
+  
+  // Start reserving things (we might actually not want this)
+  this->cells.reserve(this->rows * this->cols);
   this->cellsOnPlane.reserve(this->rows * this->cols);
   /* This isn't perfect, but I just want to get something down for now*/
   this->vertices.reserve(2 * this->rows * this->cols);
@@ -65,6 +73,7 @@ void RegularMesh::generateDelaunay()
   std::cout << "Done Triangulating" << std::endl;
   std::cout << "there are " << out.numberoftriangles << " triangles" << std::endl;
   
+  this->nVertices = out.numberoftriangles; 
   // Start populating some fields 
   std::vector<std::set<int>> sharedVertices;
   std::vector<std::set<int>> verticesOnCell;
@@ -72,6 +81,10 @@ void RegularMesh::generateDelaunay()
   sharedVertices.resize(in.numberofpoints);
   verticesOnCell.resize(in.numberofpoints);
   cellsOnVertex.resize(out.numberoftriangles);
+
+  // This loop is slow at nlogn
+  // it's definitely doable in linear time and memory
+  // but sets are easy to write for now
   for (int i=0; i < out.numberoftriangles; i++){
     int a = out.trianglelist[i * 3];
     int b = out.trianglelist[i * 3 + 1];
