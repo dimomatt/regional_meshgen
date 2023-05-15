@@ -9,6 +9,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
    * Create File
    */
   netCDF::NcFile outFile("out.nc", netCDF::NcFile::replace);
+  
   /*
    * Define Dimensions
    */
@@ -80,6 +81,19 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   
   // Write variable
   try {
+    std::vector<double> xCellIn(this->cells.size());
+    std::vector<double> yCellIn(this->cells.size());
+    std::vector<double> zCellIn(this->cells.size());
+    for (size_t i=0; i < this->cells.size(); i++) {
+      CartesianPoint cell = this->cells[i];
+      xCellIn[i] = cell.x;
+      yCellIn[i] = cell.y;
+      zCellIn[i] = cell.z;
+    } 
+   xCell.putVar(xCellIn.data());
+   yCell.putVar(yCellIn.data());
+   zCell.putVar(zCellIn.data());
+    
   //areaCell.putVar(this->areaCell.data());
   //areaTriangle.putVar(this->areaTriangle.data());
   //meshDensity.putVar(this->meshDensity.data());
@@ -91,14 +105,19 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   
   // Write Connectivity Fields;
   nEdgesOnCell.putVar(this->nEdgesOnCell.data());
+  std::cout << "Done Writing NetCDF" << std::endl; 
   //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
   //indexToCellID.putVar(this->indexToCellID.data());
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
   //indexToVertexID.putVar(this->indexToVertexID.data());
+  
   cellsOnCell.putVar(this->cellsOnCell.data());
+  std::cout << "Done Writing NetCDF" << std::endl; 
   //edgesOnCell.putVar(this->edgesOnCell.data());
   verticesOnCell.putVar(this->verticesOnCell.data());
+  std::cout << "Done Writing NetCDF" << std::endl; 
   cellsOnVertex.putVar(this->cellsOnVertex.data());
+  std::cout << "Done Writing cellsOnVerte" << std::endl; 
   //edgesOnVertex.putVar(this->edgesOnVertex.data());
   } catch (netCDF::exceptions::NcException& e) {
     std::cerr << "NetCDF exception: " << e.what() << std::endl;
