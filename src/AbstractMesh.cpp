@@ -90,7 +90,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   //weightsOnEdge.putVar(this->weightsOnEdge.data());
   
   // Write Connectivity Fields;
-  //nEdgesOnCell.putVar(this->nEdgesOnCell.data());
+  nEdgesOnCell.putVar(this->nEdgesOnCell.data());
   //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
   //indexToCellID.putVar(this->indexToCellID.data());
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
@@ -105,6 +105,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
     outFile.close();
     return;
   }
-  
+  std::cout << "Done Writing NetCDF" << std::endl; 
   outFile.close();
+  std::cout << "Done Closing NetCDF" << std::endl;
 }

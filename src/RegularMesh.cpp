@@ -74,6 +74,7 @@ void RegularMesh::generateDelaunay()
   std::cout << "there are " << out.numberoftriangles << " triangles" << std::endl;
   
   this->nVertices = out.numberoftriangles; 
+  this->nEdges = out.numberoftriangles;
   // Start populating some fields 
   std::vector<std::set<int>> sharedVertices;
   std::vector<std::set<int>> verticesOnCell;
@@ -113,6 +114,11 @@ void RegularMesh::generateDelaunay()
   this->verticesOnCell = convertSetsToVectors(verticesOnCell);
   std::cout << "Saving cellsOnVertex" << std::endl;
   this->cellsOnVertex = convertSetsToVectors(cellsOnVertex);
+  this->nEdgesOnCell.resize(this->cellsOnCell.size());
+  for (int i = 0; i < this->cellsOnCell.size(); i++){
+    this->nEdgesOnCell[i] = this->cellsOnCell[i].size();
+  }
+
 }
 
 
