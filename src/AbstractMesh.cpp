@@ -93,7 +93,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
    xCell.putVar(xCellIn.data());
    yCell.putVar(yCellIn.data());
    zCell.putVar(zCellIn.data());
-    
+   std::cout << "here" << std::endl;
     /* 
     std::vector<double> xEdgeIn(this->edges.size());
     std::vector<double> yEdgeIn(this->edges.size());

@@ -145,6 +145,18 @@ void RegularMesh::projectCells(AbstractProjector& projector){
                  this->cells.begin(),
                  [&projector](Point2D x){ 
                  return projector.projectToSphere(x); });
+  this->vertices.resize(this->verticesOnPlane.size());
+  std::transform(this->verticesOnPlane.begin(),
+                 this->verticesOnPlane.end(),
+                 this->vertices.begin(),
+                 [&projector](Point2D x){ 
+                 return projector.projectToSphere(x); });
+  this->edges.resize(this->edgesOnPlane.size());
+  std::transform(this->edgesOnPlane.begin(),
+                 this->edgesOnPlane.end(),
+                 this->edges.begin(),
+                 [&projector](Point2D x){ 
+                 return projector.projectToSphere(x); });
 }
 
 
@@ -166,5 +178,23 @@ void RegularMesh::generateCells()
 }
 
 void RegularMesh::generateVoronoi(){
+  // cellsOnCell is now is ccw order,
+  // we can calculate the vertices and edges
+  // in ccw order from that.
+  this->verticesOnCell.resize(this->nCells);
+  this->edgesOnCell.resize(this->nEdges);
+
+  Point2D lastVertex;
+  for (int i=0; i < this->cellsOnCell.size(); i++){
+    for (int j=0; j < this->cellsOnCell[i].size(); j++) {
+      int nextIndex = (i + 1) % this->cellsOnCell[i].size();
+      this->verticesOnPlane.push_back(
+          circumcenter2D(this->cellsOnPlane[i],
+                         this->cellsOnPlane[this->cellsOnCell[i][j]],
+                         this->cellsOnPlane[this->cellsOnCell[i][nextIndex]]));
+      this->verticesOnCell[i].push_back(vertices.size());
+    }
+  
+  }
   return;
 }
