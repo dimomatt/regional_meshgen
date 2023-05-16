@@ -28,9 +28,6 @@ RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
   // Start reserving things (we might actually not want this)
   this->cells.reserve(this->rows * this->cols);
   this->cellsOnPlane.reserve(this->rows * this->cols);
-  /* This isn't perfect, but I just want to get something down for now*/
-  this->vertices.reserve(2 * this->rows * this->cols);
-  this->edges.reserve(2 * this->rows * this->cols);
 }
 
 void RegularMesh::generateDelaunay()
@@ -76,14 +73,13 @@ void RegularMesh::generateDelaunay()
   this->nVertices = out.numberoftriangles; 
   this->nEdges = out.numberoftriangles;
   // Start populating some fields 
+ 
   std::vector<std::set<int>> sharedVertices;
   std::vector<std::set<int>> verticesOnCell;
   std::vector<std::set<int>> cellsOnVertex;
   sharedVertices.resize(in.numberofpoints);
   verticesOnCell.resize(in.numberofpoints);
   cellsOnVertex.resize(out.numberoftriangles);
-  
-  std::set<Point2D> verticesOnPlane; 
   // This loop is slow at nlogn
   // it's definitely doable in linear time and memory
   // but sets are easy to write for now
@@ -106,9 +102,9 @@ void RegularMesh::generateDelaunay()
     // Also populate Vertices On Cell
     verticesOnCell[a].insert(i);
     verticesOnCell[b].insert(i);
-    verticesOnCell[c].insert(i);
-   
+    verticesOnCell[c].insert(i); 
   }
+  // Convert them from vectors of sets to vectors of vectors
   std::cout << "Saving cellsOnCell" << std::endl;
   this->cellsOnCell = convertSetsToVectors(sharedVertices);
   std::cout << "Saving verticesOnCell" << std::endl;
@@ -116,8 +112,27 @@ void RegularMesh::generateDelaunay()
   std::cout << "Saving cellsOnVertex" << std::endl;
   this->cellsOnVertex = convertSetsToVectors(cellsOnVertex);
   this->nEdgesOnCell.resize(this->cellsOnCell.size());
+
+  // Populate nEdgesOnCell
   for (int i = 0; i < this->cellsOnCell.size(); i++){
     this->nEdgesOnCell[i] = this->cellsOnCell[i].size();
+  }
+
+  // Get the cells in counter clockwise order
+  for (int i=0; i < this->cellsOnCell.size(); i++){
+    Point2D cellPoint = this->cellsOnPlane[i];
+    std::sort(this->cellsOnCell[i].begin(),
+              this->cellsOnCell[i].end(),
+              [&](int i1, int i2) {
+              // Lambda that sorts based on the angle from a reference point
+              Point2D p1{out.pointlist[2*i1], out.pointlist[2*i1 + 1]};
+              Point2D p2{out.pointlist[2*i2], out.pointlist[2*i2 + 1]};
+
+              double angle1 = getAngle(cellPoint, p1);
+              double angle2 = getAngle(cellPoint, p2);
+
+              return angle1 < angle2;
+              });
   }
 
 }
@@ -131,6 +146,10 @@ void RegularMesh::projectCells(AbstractProjector& projector){
                  [&projector](Point2D x){ 
                  return projector.projectToSphere(x); });
 }
+
+
+
+
 
 void RegularMesh::generateCells()
 {

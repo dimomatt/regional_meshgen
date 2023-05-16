@@ -4,7 +4,6 @@ add_library(lib OBJECT
             StereographicProjector.cpp
             AbstractMesh.cpp
             RegularMesh.cpp
-            helpers.cpp
             ${HEADERS})
 
 
