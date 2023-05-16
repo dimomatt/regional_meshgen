@@ -82,7 +82,8 @@ void RegularMesh::generateDelaunay()
   sharedVertices.resize(in.numberofpoints);
   verticesOnCell.resize(in.numberofpoints);
   cellsOnVertex.resize(out.numberoftriangles);
-
+  
+  std::set<Point2D> verticesOnPlane; 
   // This loop is slow at nlogn
   // it's definitely doable in linear time and memory
   // but sets are easy to write for now
@@ -106,7 +107,7 @@ void RegularMesh::generateDelaunay()
     verticesOnCell[a].insert(i);
     verticesOnCell[b].insert(i);
     verticesOnCell[c].insert(i);
-  
+   
   }
   std::cout << "Saving cellsOnCell" << std::endl;
   this->cellsOnCell = convertSetsToVectors(sharedVertices);

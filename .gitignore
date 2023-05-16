@@ -35,3 +35,4 @@ Thumbs.db
 
 # Python stuff
 python/env/
+python/viz/*.png

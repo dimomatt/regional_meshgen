@@ -94,6 +94,33 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
    yCell.putVar(yCellIn.data());
    zCell.putVar(zCellIn.data());
     
+    /* 
+    std::vector<double> xEdgeIn(this->edges.size());
+    std::vector<double> yEdgeIn(this->edges.size());
+    std::vector<double> zEdgeIn(this->edges.size());
+    for (size_t i=0; i < this->edges.size(); i++) {
+      CartesianPoint edge = this->edges[i];
+      xEdgeIn[i] = edge.x;
+      yEdgeIn[i] = edge.y;
+      zEdgeIn[i] = edge.z;
+    } 
+   xEdge.putVar(xEdgeIn.data());
+   yEdge.putVar(yEdgeIn.data());
+   zEdge.putVar(zEdgeIn.data());
+*/
+
+    std::vector<double> xVertexIn(this->vertices.size());
+    std::vector<double> yVertexIn(this->vertices.size());
+    std::vector<double> zVertexIn(this->vertices.size());
+    for (size_t i=0; i < this->vertices.size(); i++) {
+      CartesianPoint vertex = this->vertices[i];
+      xVertexIn[i] = vertex.x;
+      yVertexIn[i] = vertex.y;
+      zVertexIn[i] = vertex.z;
+    } 
+   xVertex.putVar(xVertexIn.data());
+   yVertex.putVar(yVertexIn.data());
+   zVertex.putVar(zVertexIn.data());
   //areaCell.putVar(this->areaCell.data());
   //areaTriangle.putVar(this->areaTriangle.data());
   //meshDensity.putVar(this->meshDensity.data());
