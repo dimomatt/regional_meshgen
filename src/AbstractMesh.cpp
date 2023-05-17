@@ -1,4 +1,5 @@
 #include "AbstractMesh.hpp"
+#include <helpers.hpp>
 #include <string>
 #include <netcdf>
 #include <algorithm>
@@ -138,12 +139,12 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
   //indexToVertexID.putVar(this->indexToVertexID.data());
   
-  cellsOnCell.putVar(this->cellsOnCell.data());
+  cellsOnCell.putVar(flatten(this->cellsOnCell).data());
   std::cout << "Done Writing NetCDF" << std::endl; 
   //edgesOnCell.putVar(this->edgesOnCell.data());
-  verticesOnCell.putVar(this->verticesOnCell.data());
+  verticesOnCell.putVar(flatten(this->verticesOnCell).data());
   std::cout << "Done Writing NetCDF" << std::endl; 
-  cellsOnVertex.putVar(this->cellsOnVertex.data());
+  cellsOnVertex.putVar(flatten(this->cellsOnVertex).data());
   std::cout << "Done Writing cellsOnVerte" << std::endl; 
   //edgesOnVertex.putVar(this->edgesOnVertex.data());
   } catch (netCDF::exceptions::NcException& e) {

@@ -17,6 +17,9 @@ x_cell = dataset.variables['xCell'][:]
 y_cell = dataset.variables['yCell'][:]
 z_cell = dataset.variables['zCell'][:]
 
+
+
+
 dataset.close()
 
 fig = plt.figure()
@@ -25,5 +28,8 @@ ax.scatter(x_cell, y_cell, z_cell)
 ax.set_xlabel('x (m)')
 ax.set_ylabel('y (m)')
 ax.set_zlabel('z (m)')
+
+for i, elem in enumerate(x_cell):
+  ax.text(x_cell[i], y_cell[i], z_cell[i], str(i))
 
 plt.savefig('out.png')

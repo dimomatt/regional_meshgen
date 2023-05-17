@@ -1,5 +1,5 @@
 #include "RegularMesh.hpp"
-#include "helpers.hpp"
+#include <helpers.hpp>
 #include <vector>
 #include <string>
 #include <cmath>
@@ -84,6 +84,13 @@ void RegularMesh::generateDelaunay()
   // it's definitely doable in linear time and memory
   // but sets are easy to write for now
   for (int i=0; i < out.numberoftriangles; i++){
+    
+    int a = out.trianglelist[i * 3];
+    int b = out.trianglelist[i * 3 + 1];
+    int c = out.trianglelist[i * 3 + 2];
+    std::cout << a << ", " << b << ", " << c << std::endl;
+  }
+  for (int i=0; i < out.numberoftriangles; i++){
     int a = out.trianglelist[i * 3];
     int b = out.trianglelist[i * 3 + 1];
     int c = out.trianglelist[i * 3 + 2];
@@ -133,6 +140,14 @@ void RegularMesh::generateDelaunay()
 
               return angle1 < angle2;
               });
+  }
+  for (int i=0; i < this->cellsOnCell.size(); i++){
+    std::cout << "cells: ";
+    for (auto item : this->cellsOnCell[i]){
+      std::cout << item << ", ";
+
+    }
+    std::cout << "\b\b On Cell " << i << std::endl;
   }
 
 }

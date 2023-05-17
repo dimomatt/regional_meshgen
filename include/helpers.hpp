@@ -1,16 +1,17 @@
+#pragma once
 #ifndef HELPERS_H
 #define HELPERS_H
 #include "point.hpp"
 #include <set>
 #include <vector>
 #include <cmath>
-
-Point2D circumcenter2D(LatLonPoint &a,
+#include <iostream>
+inline Point2D circumcenter2D(LatLonPoint &a,
                        LatLonPoint &b,
                        LatLonPoint &c);
 
 
-Point2D circumcenter2D(Point2D &a,
+inline Point2D circumcenter2D(Point2D &a,
                        Point2D &b,
                        Point2D &c){
   Point2D outPoint;
@@ -22,45 +23,57 @@ Point2D circumcenter2D(Point2D &a,
   return outPoint;
 }
 
-Point2D midpoint(Point2D &a, Point2D &b){
+inline Point2D midpoint(Point2D &a, Point2D &b){
   Point2D midpoint;
   midpoint.x = (a.x + b.x) / 2.0;
   midpoint.y = (a.y + b.y) / 2.0;
   return midpoint;
 }
 
-double distanceSquared(Point2D &a, Point2D &b){
+inline double distanceSquared(Point2D &a, Point2D &b){
   double dx = b.x - a.x;
   double dy = b.y - a.y;
   return (dx + dy);
 }
 
-double distance(Point2D &a, Point2D &b){
+inline double distance(Point2D &a, Point2D &b){
   return sqrt(distanceSquared(a, b));
 }
 
-double kiteArea(double p, double q){
+inline double kiteArea(double p, double q){
   return (p * q ) / 2;
 }
 
-double kiteArea(double a, double b, double theta){
+inline double kiteArea(double a, double b, double theta){
   return (a * b) * sin(theta); 
 }
 
 
-double getAngle(const Point2D& a, const Point2D &b){
+inline double getAngle(const Point2D& a, const Point2D &b){
   double angle = std::atan2(b.y - a.y, b.x - a.x);
   return angle < 0 ? angle + 2*M_PI : angle;
 }
 
 template <typename T>
-std::vector<std::vector<T>> convertSetsToVectors(
+inline std::vector<std::vector<T>> convertSetsToVectors(
     std::vector<std::set<T>> &input){
   std::vector<std::vector<T>> output(input.size());
+  
   for (size_t i=0; i < input.size(); i++){
     output[i] = std::vector<T>(input[i].begin(), input[i].end());
   }
   return output;
 }
+
+template <typename T>
+inline std::vector<T> flatten(std::vector<std::vector<T>> &input){
+  std::vector<T> result;
+  for (const auto& inner : input) {
+    result.insert(result.end(), inner.begin(), inner.end());
+  }
+  return result;
+}
+
+
 
 #endif //HELPERS_H
