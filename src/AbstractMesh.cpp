@@ -64,7 +64,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   
   // nEdges, TWO
   netCDF::NcVar cellsOnEdge = outFile.addVar("cellsOnEdge", netCDF::ncInt, {nEdges, TWO});
-  netCDF::NcVar VerticesOnEdge = outFile.addVar("verticesOnEdge", netCDF::ncInt, {nEdges, TWO});
+  netCDF::NcVar verticesOnEdge = outFile.addVar("verticesOnEdge", netCDF::ncInt, {nEdges, TWO});
   
   // nEdges, maxEdges2
   netCDF::NcVar edgesOnEdge = outFile.addVar("edgesOnEdge", netCDF::ncInt, {nEdges, maxEdges2});
@@ -94,7 +94,6 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
    xCell.putVar(xCellIn.data());
    yCell.putVar(yCellIn.data());
    zCell.putVar(zCellIn.data());
-   std::cout << "here" << std::endl;
     /* 
     std::vector<double> xEdgeIn(this->edges.size());
     std::vector<double> yEdgeIn(this->edges.size());
@@ -133,19 +132,16 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   
   // Write Connectivity Fields;
   nEdgesOnCell.putVar(this->nEdgesOnCell.data());
-  std::cout << "Done Writing NetCDF" << std::endl; 
   //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
   //indexToCellID.putVar(this->indexToCellID.data());
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
   //indexToVertexID.putVar(this->indexToVertexID.data());
   
   cellsOnCell.putVar(flatten(this->cellsOnCell).data());
-  std::cout << "Done Writing NetCDF" << std::endl; 
   //edgesOnCell.putVar(this->edgesOnCell.data());
+  print2DVec(this->verticesOnCell);
   verticesOnCell.putVar(flatten(this->verticesOnCell).data());
-  std::cout << "Done Writing NetCDF" << std::endl; 
   cellsOnVertex.putVar(flatten(this->cellsOnVertex).data());
-  std::cout << "Done Writing cellsOnVerte" << std::endl; 
   //edgesOnVertex.putVar(this->edgesOnVertex.data());
   } catch (netCDF::exceptions::NcException& e) {
     std::cerr << "NetCDF exception: " << e.what() << std::endl;
@@ -154,5 +150,4 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   }
   std::cout << "Done Writing NetCDF" << std::endl; 
   outFile.close();
-  std::cout << "Done Closing NetCDF" << std::endl;
 }

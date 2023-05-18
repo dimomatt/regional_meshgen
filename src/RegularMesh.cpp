@@ -141,15 +141,11 @@ void RegularMesh::generateDelaunay()
               return angle1 < angle2;
               });
   }
-  for (int i=0; i < this->cellsOnCell.size(); i++){
-    std::cout << "cells: ";
-    for (auto item : this->cellsOnCell[i]){
-      std::cout << item << ", ";
-
-    }
-    std::cout << "\b\b On Cell " << i << std::endl;
-  }
-
+  
+  padSubvectors(this->cellsOnCell, this->maxEdges, -1);
+  padSubvectors(this->verticesOnCell, this->maxEdges, -1);
+  print2DVec(this->verticesOnCell);
+  padSubvectors(this->cellsOnVertex, this->vertexDegree, -1); 
 }
 
 
@@ -207,7 +203,6 @@ void RegularMesh::generateVoronoi(){
           circumcenter2D(this->cellsOnPlane[i],
                          this->cellsOnPlane[this->cellsOnCell[i][j]],
                          this->cellsOnPlane[this->cellsOnCell[i][nextIndex]]));
-      this->verticesOnCell[i].push_back(vertices.size());
     }
   
   }
