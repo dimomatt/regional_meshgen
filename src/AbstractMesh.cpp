@@ -25,6 +25,14 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   /*
    * Defining Variables
    */
+  //debug fields
+  netCDF::NcVar planeXCell = outFile.addVar("planeXCell", netCDF::ncDouble, nCells);
+  netCDF::NcVar planeYCell = outFile.addVar("planeYCell", netCDF::ncDouble, nCells);
+  netCDF::NcVar planeXVertex = outFile.addVar("planeXVertex", netCDF::ncDouble, nVertices);
+  netCDF::NcVar planeYVertex = outFile.addVar("planeYVertex", netCDF::ncDouble, nVertices);
+  netCDF::NcVar planeXEdge = outFile.addVar("planeXEdge", netCDF::ncDouble, nEdges);
+  netCDF::NcVar planeYEdge = outFile.addVar("planeYEdge", netCDF::ncDouble, nEdges);
+
   // numCells
   netCDF::NcVar indexToCellID = outFile.addVar("indexToCellID", netCDF::ncInt, nCells);
   netCDF::NcVar xCell = outFile.addVar("xCell", netCDF::ncDouble, nCells);
@@ -80,8 +88,31 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
                                                  {nVertices, vertexDegree});
   
   
+   
+  padSubvectors(this->cellsOnCell, this->maxEdges, -1);
+  padSubvectors(this->verticesOnCell, this->maxEdges, -1);
+  padSubvectors(this->cellsOnVertex, this->vertexDegree, -1); 
+  
+  // debug
+  std::vector<double> xPlaneCellIn(this->cells.size());
+  std::vector<double> yPlaneCellIn(this->cells.size());
+  for (size_t i=0; i < this->cellsOnPlane.size(); i++){
+    xPlaneCellIn[i] = this->cellsOnPlane[i].x; 
+    yPlaneCellIn[i] = this->cellsOnPlane[i].y; 
+  }
+  planeXCell.putVar(xPlaneCellIn.data());
+  planeYCell.putVar(yPlaneCellIn.data());
+  
+  std::vector<double> xPlaneVertexIn(this->vertices.size());
+  std::vector<double> yPlaneVertexIn(this->vertices.size());
+  for (size_t i=0; i < this->verticesOnPlane.size(); i++){
+    xPlaneVertexIn[i] = this->verticesOnPlane[i].x; 
+    yPlaneVertexIn[i] = this->verticesOnPlane[i].y; 
+  }
+  planeXVertex.putVar(xPlaneVertexIn.data());
+  planeYVertex.putVar(yPlaneVertexIn.data());
   // Write variable
-  try {
+  try { 
     std::vector<double> xCellIn(this->cells.size());
     std::vector<double> yCellIn(this->cells.size());
     std::vector<double> zCellIn(this->cells.size());
@@ -90,7 +121,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
       xCellIn[i] = cell.x;
       yCellIn[i] = cell.y;
       zCellIn[i] = cell.z;
-    } 
+    }
    xCell.putVar(xCellIn.data());
    yCell.putVar(yCellIn.data());
    zCell.putVar(zCellIn.data());
@@ -139,7 +170,6 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   
   cellsOnCell.putVar(flatten(this->cellsOnCell).data());
   //edgesOnCell.putVar(this->edgesOnCell.data());
-  print2DVec(this->verticesOnCell);
   verticesOnCell.putVar(flatten(this->verticesOnCell).data());
   cellsOnVertex.putVar(flatten(this->cellsOnVertex).data());
   //edgesOnVertex.putVar(this->edgesOnVertex.data());

@@ -74,6 +74,30 @@ inline std::vector<T> flatten(std::vector<std::vector<T>> &input){
   return result;
 }
 
+template <typename T>
+inline void padSubvectors(std::vector<std::vector<T>> &vec,
+                          int size,
+                          T padding){
+  for (auto& sub : vec){
+    while(sub.size() < size) {
+      sub.push_back(padding);
+    }
+  }
+}
 
+
+template <typename T>
+inline void print2DVec(std::vector<std::vector<T>> &vec){
+  for (int i=0; i < vec.size(); i++){
+    for (auto item : vec[i]){
+      std::cout << item << ", ";
+    }
+    std::cout << "\b\b at index " << i << std::endl;
+  }
+}
+
+inline void printPoint2D(Point2D &point){
+  std::cout << "(" << point.x << ", " << point.y << ")\n";
+}
 
 #endif //HELPERS_H

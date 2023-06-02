@@ -18,12 +18,11 @@ int main(int argc, const char **argv)
   std::string configFilename;
   bool verbose = false;
   
-  RegularMesh mesh = RegularMesh(20, 20, 1.0);
+  RegularMesh mesh = RegularMesh(3, 4, 1.0);
   StereographicProjector projector(6378.14);
   mesh.generateCells();
   mesh.generateDelaunay();
   mesh.generateVoronoi();
   mesh.projectCells(projector);
   mesh.writeNetCDF(std::string("out.nc"));
-
 }
