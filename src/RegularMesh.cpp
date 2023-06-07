@@ -83,12 +83,17 @@ void RegularMesh::generateDelaunay()
   // This loop is slow at nlogn
   // it's definitely doable in linear time and memory
   // but sets are easy to write for now
+  //
+  /* 
+   * This loops over every triangle and pushes the cells on cell to shared 
+   * vertices, the cells on verte to cells on vertex,
+   * and the vertices on cell to vertices on cell. 
+   *
+   */
   for (int i=0; i < out.numberoftriangles; i++){
     int a = out.trianglelist[i * 3];
     int b = out.trianglelist[i * 3 + 1];
     int c = out.trianglelist[i * 3 + 2];
-    
-    std::cout << i << ": " << a << ", " << b << ", " << c << std::endl;
 
     sharedVertices[a].insert(b);
     sharedVertices[a].insert(c);
@@ -119,7 +124,7 @@ void RegularMesh::generateDelaunay()
   for (int i = 0; i < this->cellsOnCell.size(); i++){
     this->nEdgesOnCell[i] = this->cellsOnCell[i].size();
   }
-
+  print2DVec(this->verticesOnCell);
   // Get the cells in counter clockwise order
   for (int i=0; i < this->cellsOnCell.size(); i++){
     Point2D cellPoint = this->cellsOnPlane[i];
@@ -129,7 +134,8 @@ void RegularMesh::generateDelaunay()
               // Lambda that sorts based on the angle from a reference point
               Point2D p1{out.pointlist[2*i1], out.pointlist[2*i1 + 1]};
               Point2D p2{out.pointlist[2*i2], out.pointlist[2*i2 + 1]};
-
+              
+              // Get the angle from the central cell point to the neighbor
               double angle1 = getAngle(cellPoint, p1);
               double angle2 = getAngle(cellPoint, p2);
 
@@ -175,6 +181,13 @@ void RegularMesh::generateCells()
       point.x = this->resolution * i + 1.;
       point.y = this->resolution * std::sqrt(3) *  0.75 * j + 1. + offset;
       this->cellsOnPlane.push_back(point);
+
+      // Store the edge points to be thrown out after triangulation
+      if (j == 0 || i == 0 ||
+          j == this->rows - 1 ||
+          i == this->cols - 1) {
+        this->edgePoints.push_back(this->cellsOnPlane.size() - 1);
+      }
     }
   }
   for (int i=1; i < this->indexToCellID.size(); i++){
@@ -183,7 +196,7 @@ void RegularMesh::generateCells()
 }
 
 void RegularMesh::generateVoronoi(){
-  // cellsOnCell is now is ccw order,
+  // cellsOnCell is now in ccw order,
   // we can calculate the vertices and edges
   // in ccw order from that.
   this->edgesOnCell.resize(this->nEdges);
@@ -199,7 +212,6 @@ void RegularMesh::generateVoronoi(){
           this->cellsOnCell[i][nextIndex] < i){
         continue;
       }
-      std::cout << this->cellsOnCell[i].size() << std::endl;
       std::cout << i << ", " << j << ", " << nextIndex << std::endl;
       std::cout << "triangle vertices: " << this->cellsOnCell[i][j] << 
                 ", " << this->cellsOnCell[i][nextIndex] << ", "  << i <<std::endl;
