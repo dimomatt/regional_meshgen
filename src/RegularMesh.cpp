@@ -90,10 +90,17 @@ void RegularMesh::generateDelaunay()
    * and the vertices on cell to vertices on cell. 
    *
    */
+  this->verticesOnPlane.resize(out.numberoftriangles);
   for (int i=0; i < out.numberoftriangles; i++){
     int a = out.trianglelist[i * 3];
     int b = out.trianglelist[i * 3 + 1];
     int c = out.trianglelist[i * 3 + 2];
+    Point2D pointA = {out.pointlist[2*a], out.pointlist[2*a + 1]};
+    Point2D pointB = {out.pointlist[2*b], out.pointlist[2*b + 1]};
+    Point2D pointC = {out.pointlist[2*c], out.pointlist[2*c + 1]};
+    
+    // Get the vertices on the plane to later project
+    this->verticesOnPlane[i] = (circumcenter2D( pointA, pointB, pointC));
 
     sharedVertices[a].insert(b);
     sharedVertices[a].insert(c);
@@ -106,12 +113,13 @@ void RegularMesh::generateDelaunay()
     cellsOnVertex[i].insert(a);
     cellsOnVertex[i].insert(b);
     cellsOnVertex[i].insert(c);
-
+    
     // Also populate Vertices On Cell
     verticesOnCell[a].insert(i);
     verticesOnCell[b].insert(i);
-    verticesOnCell[c].insert(i); 
+    verticesOnCell[c].insert(i);
   }
+
   // Convert them from vectors of sets to vectors of vectors
   std::cout << "Saving cellsOnCell" << std::endl;
   this->cellsOnCell = convertSetsToVectors(sharedVertices);
@@ -119,12 +127,15 @@ void RegularMesh::generateDelaunay()
   this->verticesOnCell = convertSetsToVectors(verticesOnCell);
   std::cout << "Saving cellsOnVertex" << std::endl;
   this->cellsOnVertex = convertSetsToVectors(cellsOnVertex);
-  this->nEdgesOnCell.resize(this->cellsOnCell.size());
+
   // Populate nEdgesOnCell
+  this->nEdgesOnCell.resize(this->cellsOnCell.size());
   for (int i = 0; i < this->cellsOnCell.size(); i++){
     this->nEdgesOnCell[i] = this->cellsOnCell[i].size();
   }
+
   print2DVec(this->verticesOnCell);
+
   // Get the cells in counter clockwise order
   for (int i=0; i < this->cellsOnCell.size(); i++){
     Point2D cellPoint = this->cellsOnPlane[i];
@@ -142,9 +153,7 @@ void RegularMesh::generateDelaunay()
               return angle1 < angle2;
               });
   }
-  
 }
-
 
 void RegularMesh::projectCells(AbstractProjector& projector){
   this->cells.resize(this->cellsOnPlane.size());
@@ -166,10 +175,6 @@ void RegularMesh::projectCells(AbstractProjector& projector){
                  [&projector](Point2D x){ 
                  return projector.projectToSphere(x); });
 }
-
-
-
-
 
 void RegularMesh::generateCells()
 {
@@ -200,26 +205,6 @@ void RegularMesh::generateVoronoi(){
   // we can calculate the vertices and edges
   // in ccw order from that.
   this->edgesOnCell.resize(this->nEdges);
-
-  Point2D lastVertex;
-
-  for (int i=0; i < this->cellsOnCell.size(); i++){
-    Point2D a = this->cellsOnPlane[i];
-    for (int j=0; j < this->cellsOnCell[i].size(); j++) {
-      int nextIndex = (j + 1) % this->cellsOnCell[i].size();
-      // This is to ensure duplicates don't get added.
-      if (this->cellsOnCell[i][j] < i ||
-          this->cellsOnCell[i][nextIndex] < i){
-        continue;
-      }
-      std::cout << i << ", " << j << ", " << nextIndex << std::endl;
-      std::cout << "triangle vertices: " << this->cellsOnCell[i][j] << 
-                ", " << this->cellsOnCell[i][nextIndex] << ", "  << i <<std::endl;
-      this->verticesOnPlane.push_back(
-          circumcenter2D(a,
-                         this->cellsOnPlane[this->cellsOnCell[i][j]],
-                         this->cellsOnPlane[this->cellsOnCell[i][nextIndex]]));
-    }
-  }
+  
   return;
 }
