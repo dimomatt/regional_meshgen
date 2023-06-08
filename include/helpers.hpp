@@ -30,6 +30,13 @@ inline Point2D midpoint(Point2D &a, Point2D &b){
   return midpoint;
 }
 
+inline CartesianPoint midpoint(CartesianPoint &a, CartesianPoint &b){
+  CartesianPoint midpoint;
+  midpoint.x = (a.x + b.x) / 2.0;
+  midpoint.y = (a.y + b.y) / 2.0;
+  midpoint.z = (a.z + b.z) / 2.0;
+  return midpoint;
+}
 inline double distanceSquared(Point2D &a, Point2D &b){
   double dx = b.x - a.x;
   double dy = b.y - a.y;

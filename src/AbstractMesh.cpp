@@ -92,7 +92,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   padSubvectors(this->cellsOnCell, this->maxEdges, -1);
   padSubvectors(this->verticesOnCell, this->maxEdges, -1);
   padSubvectors(this->cellsOnVertex, this->vertexDegree, -1); 
-  
+  print2DVec(this->verticesOnCell); 
   // debug
   std::vector<double> xPlaneCellIn(this->cells.size());
   std::vector<double> yPlaneCellIn(this->cells.size());
@@ -111,34 +111,44 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   }
   planeXVertex.putVar(xPlaneVertexIn.data());
   planeYVertex.putVar(yPlaneVertexIn.data());
+  
+  std::vector<double> xPlaneEdgeIn(this->edges.size());
+  std::vector<double> yPlaneEdgeIn(this->edges.size());
+  for (size_t i=0; i < this->edgesOnPlane.size(); i++){
+  std::cout << i << ": "<< this->edgesOnPlane[i].x << ", " << this->edgesOnPlane[i].y << std::endl;
+    xPlaneEdgeIn[i] = this->edgesOnPlane[i].x; 
+    yPlaneEdgeIn[i] = this->edgesOnPlane[i].y; 
+  }
+  planeXEdge.putVar(xPlaneEdgeIn.data());
+  planeYEdge.putVar(yPlaneEdgeIn.data());
+  
   // Write variable
   try { 
-    std::vector<double> xCellIn(this->cells.size());
-    std::vector<double> yCellIn(this->cells.size());
-    std::vector<double> zCellIn(this->cells.size());
-    for (size_t i=0; i < this->cells.size(); i++) {
-      CartesianPoint cell = this->cells[i];
-      xCellIn[i] = cell.x;
-      yCellIn[i] = cell.y;
-      zCellIn[i] = cell.z;
-    }
+   std::vector<double> xCellIn(this->cells.size());
+   std::vector<double> yCellIn(this->cells.size());
+   std::vector<double> zCellIn(this->cells.size());
+   for (size_t i=0; i < this->cells.size(); i++) {
+     CartesianPoint cell = this->cells[i];
+     xCellIn[i] = cell.x;
+     yCellIn[i] = cell.y;
+     zCellIn[i] = cell.z;
+   }
    xCell.putVar(xCellIn.data());
    yCell.putVar(yCellIn.data());
-   zCell.putVar(zCellIn.data());
-    /* 
-    std::vector<double> xEdgeIn(this->edges.size());
-    std::vector<double> yEdgeIn(this->edges.size());
-    std::vector<double> zEdgeIn(this->edges.size());
-    for (size_t i=0; i < this->edges.size(); i++) {
-      CartesianPoint edge = this->edges[i];
-      xEdgeIn[i] = edge.x;
-      yEdgeIn[i] = edge.y;
-      zEdgeIn[i] = edge.z;
-    } 
+   zCell.putVar(zCellIn.data()); 
+   
+   std::vector<double> xEdgeIn(this->edges.size());
+   std::vector<double> yEdgeIn(this->edges.size());
+   std::vector<double> zEdgeIn(this->edges.size());
+   for (size_t i=0; i < this->edges.size(); i++) {
+     CartesianPoint edge = this->edges[i];
+     xEdgeIn[i] = edge.x;
+     yEdgeIn[i] = edge.y;
+     zEdgeIn[i] = edge.z;
+   } 
    xEdge.putVar(xEdgeIn.data());
    yEdge.putVar(yEdgeIn.data());
    zEdge.putVar(zEdgeIn.data());
-*/
 
     std::vector<double> xVertexIn(this->vertices.size());
     std::vector<double> yVertexIn(this->vertices.size());

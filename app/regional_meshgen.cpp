@@ -12,8 +12,8 @@ enum class ProjectorType { STEREOGRAPHIC };
 enum class MeshType { REGULAR };
 
 struct CommandLineOptions {
-  std::string outFile;
-  std::string configFile;
+  std::string outFile = "out.nc";
+  std::string configFile = "config.ini";
   bool verbose = false; 
 };
 
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 {  
   // Parse Args
   CommandLineOptions options = parseCommandLine(argc, argv);
-  RegularMesh mesh = RegularMesh(3, 4, 1.0);
+  RegularMesh mesh = RegularMesh(3, 3, 1.0);
   StereographicProjector projector(6378.14);
   mesh.generateCells();
   mesh.generateDelaunay();

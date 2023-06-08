@@ -134,9 +134,20 @@ void RegularMesh::generateDelaunay()
     this->nEdgesOnCell[i] = this->cellsOnCell[i].size();
   }
 
-  print2DVec(this->verticesOnCell);
 
   // Get the cells in counter clockwise order
+  for (int i=0; i < this->verticesOnCell.size(); i++){
+    Point2D cellPoint = this->cellsOnPlane[i];
+    std::sort(this->verticesOnCell[i].begin(),
+              this->verticesOnCell[i].end(),
+              [&](int i1, int i2) {
+              // Get the angle from the central cell point to the neighbor
+              double angle1 = getAngle(cellPoint, this->verticesOnPlane[i1]);
+              double angle2 = getAngle(cellPoint, this->verticesOnPlane[i2]);
+
+              return angle1 < angle2;
+              });
+  }
   for (int i=0; i < this->cellsOnCell.size(); i++){
     Point2D cellPoint = this->cellsOnPlane[i];
     std::sort(this->cellsOnCell[i].begin(),
@@ -204,7 +215,37 @@ void RegularMesh::generateVoronoi(){
   // cellsOnCell is now in ccw order,
   // we can calculate the vertices and edges
   // in ccw order from that.
-  this->edgesOnCell.resize(this->nEdges);
-  
+  this->edgesOnCell.resize(this->nCells);
+  int cell = 0;
+  std::map<std::pair<int, int>, int> insertedEdges;
+  for (auto col : this->verticesOnCell){
+    Point2D candidateEdge = midpoint(this->verticesOnPlane[col.back()],
+                                     this->verticesOnPlane[col.front()]);
+    
+    auto iterator = insertedEdges.find(std::make_pair(col.back(), col.front()));
+    if (iterator != insertedEdges.end()){
+      continue; 
+    }
+    else{
+      insertedEdges.insert({candidateEdge, this->edgesOnPlane.size()});
+      this->edgesOnPlane.push_back(candidateEdge);
+    }
+    this->edgesOnPlane.push_back(midpoint(this->verticesOnPlane[col.back()],
+                                          this->verticesOnPlane[col.front()]));
+    for (int i = 0; i < col.size() - 1; i++){
+      candidateEdge = midpoint(this->verticesOnPlane[col[i]],
+                              this->verticesOnPlane[col[i+1]]);
+      iterator = insertedEdges.find(candidateEdge);
+      if (iterator != insertedEdges.end()){
+        int index = insertedEdges.at(candidateEdge);
+        this->edgesOnCell[cell].push_back(index);
+      } else {
+        insertedEdges.insert({candidateEdge, this->edgesOnPlane.size()});
+        this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
+        this->edgesOnPlane.push_back(candidateEdge);
+      }
+    }
+    cell += 1;
+  }
   return;
 }

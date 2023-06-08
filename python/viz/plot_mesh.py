@@ -27,12 +27,17 @@ y_cell_plane = dataset.variables['planeYCell'][:]
 x_vertex_plane = dataset.variables['planeXVertex'][:]
 y_vertex_plane = dataset.variables['planeYVertex'][:]
 
-
+x_edge_plane = dataset.variables['planeXEdge'][:]
+y_edge_plane = dataset.variables['planeYEdge'][:]
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.scatter(x_cell_plane, y_cell_plane)
 ax.scatter(x_vertex_plane, y_vertex_plane)
+ax.scatter(x_edge_plane, y_edge_plane)
+
+for i, elem in enumerate(x_edge_plane):
+  ax.text(x_edge_plane[i], y_edge_plane[i], str(i))
 
 for i, elem in enumerate(x_cell_plane):
   ax.text(x_cell_plane[i], y_cell_plane[i], str(i))
