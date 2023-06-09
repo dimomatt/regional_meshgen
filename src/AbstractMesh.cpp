@@ -16,7 +16,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
    */
   netCDF::NcDim TWO = outFile.addDim("TWO", 2);
   netCDF::NcDim nCells = outFile.addDim("nCells", this->nCells);
-  netCDF::NcDim nEdges = outFile.addDim("nEdges", this->nEdges);
+  netCDF::NcDim nEdges = outFile.addDim("nEdges", this->edgesOnPlane.size());
   netCDF::NcDim nVertices = outFile.addDim("nVertices", this->nVertices);
   netCDF::NcDim maxEdges = outFile.addDim("maxEdges", this->maxEdges);
   netCDF::NcDim maxEdges2 = outFile.addDim("maxEdges2", this->maxEdges2);
@@ -115,7 +115,6 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   std::vector<double> xPlaneEdgeIn(this->edges.size());
   std::vector<double> yPlaneEdgeIn(this->edges.size());
   for (size_t i=0; i < this->edgesOnPlane.size(); i++){
-  std::cout << i << ": "<< this->edgesOnPlane[i].x << ", " << this->edgesOnPlane[i].y << std::endl;
     xPlaneEdgeIn[i] = this->edgesOnPlane[i].x; 
     yPlaneEdgeIn[i] = this->edgesOnPlane[i].y; 
   }

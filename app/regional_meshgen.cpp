@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 {  
   // Parse Args
   CommandLineOptions options = parseCommandLine(argc, argv);
-  RegularMesh mesh = RegularMesh(3, 3, 1.0);
+  RegularMesh mesh = RegularMesh(1000, 1000, 1.0);
   StereographicProjector projector(6378.14);
   mesh.generateCells();
   mesh.generateDelaunay();

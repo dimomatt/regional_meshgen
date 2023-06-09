@@ -10,14 +10,6 @@ struct CartesianPoint
 struct Point2D
 {
   double x, y;
-
-  bool operator<(const Point &other) const {
-    const double epsilon = 1e-7; 
-    if (std::abs(x - other.x) < epsilon) {
-      return y < other.y;
-    }
-   return x < other.x; 
-  }
 };
 
 struct Point2DCompare

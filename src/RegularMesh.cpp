@@ -211,6 +211,12 @@ void RegularMesh::generateCells()
   }
 }
 
+// Tihis is a helper and will go with helpers in a bit
+std::pair<int, int> make_ordered_pair(int a, int b) {
+  return std::make_pair(std::min(a, b), std::max(a, b));
+}
+
+
 void RegularMesh::generateVoronoi(){
   // cellsOnCell is now in ccw order,
   // we can calculate the vertices and edges
@@ -219,28 +225,31 @@ void RegularMesh::generateVoronoi(){
   int cell = 0;
   std::map<std::pair<int, int>, int> insertedEdges;
   for (auto col : this->verticesOnCell){
+    std::pair<int,int> orderedPair = make_ordered_pair(col.back(), col.front());
     Point2D candidateEdge = midpoint(this->verticesOnPlane[col.back()],
                                      this->verticesOnPlane[col.front()]);
     
-    auto iterator = insertedEdges.find(std::make_pair(col.back(), col.front()));
+    auto iterator = insertedEdges.find(orderedPair);
     if (iterator != insertedEdges.end()){
-      continue; 
+      int index = insertedEdges.at(orderedPair);
+      this->edgesOnCell[cell].push_back(index);
     }
     else{
-      insertedEdges.insert({candidateEdge, this->edgesOnPlane.size()});
+      insertedEdges.insert({orderedPair, this->edgesOnPlane.size()});
+      this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
       this->edgesOnPlane.push_back(candidateEdge);
     }
-    this->edgesOnPlane.push_back(midpoint(this->verticesOnPlane[col.back()],
-                                          this->verticesOnPlane[col.front()]));
+    
     for (int i = 0; i < col.size() - 1; i++){
+      orderedPair = make_ordered_pair(col[i], col[i+1]);
       candidateEdge = midpoint(this->verticesOnPlane[col[i]],
                               this->verticesOnPlane[col[i+1]]);
-      iterator = insertedEdges.find(candidateEdge);
+      iterator = insertedEdges.find(orderedPair);
       if (iterator != insertedEdges.end()){
-        int index = insertedEdges.at(candidateEdge);
+        int index = insertedEdges.at(orderedPair);
         this->edgesOnCell[cell].push_back(index);
       } else {
-        insertedEdges.insert({candidateEdge, this->edgesOnPlane.size()});
+        insertedEdges.insert({orderedPair, this->edgesOnPlane.size()});
         this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
         this->edgesOnPlane.push_back(candidateEdge);
       }
