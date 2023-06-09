@@ -211,7 +211,7 @@ void RegularMesh::generateCells()
   }
 }
 
-// Tihis is a helper and will go with helpers in a bit
+// This is a helper and will go with helpers in a bit
 std::pair<int, int> make_ordered_pair(int a, int b) {
   return std::make_pair(std::min(a, b), std::max(a, b));
 }

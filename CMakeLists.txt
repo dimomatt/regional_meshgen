@@ -16,3 +16,6 @@ endif(BUILD_TESTS)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src)
 add_subdirectory(${PROJECT_SOURCE_DIR}/app)
 add_subdirectory(${PROJECT_SOURCE_DIR}/libs/triangle)
+
+add_library(inipp INTERFACE)
+target_include_directories(inipp INTERFACE ${PROJECT_SOURCE_DIR}/libs/inipp)

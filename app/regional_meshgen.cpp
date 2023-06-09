@@ -4,6 +4,7 @@
 #include "StereographicProjector.hpp"
 #include "RegularMesh.hpp"
 #include "point.hpp"
+#include "inipp.h"
 
 // In case we want to add other projections
 enum class ProjectorType { STEREOGRAPHIC };
@@ -47,8 +48,21 @@ int main(int argc, char *argv[])
 {  
   // Parse Args
   CommandLineOptions options = parseCommandLine(argc, argv);
-  RegularMesh mesh = RegularMesh(1000, 1000, 1.0);
-  StereographicProjector projector(6378.14);
+  
+  // Parse config
+  inipp::Ini<char> ini;
+  std::ifstream is(options.configFile);
+  ini.parse(is);
+  int rows = -1;
+  int cols = -1;
+  double resolution = -1.0;
+  double radius = -1.0;
+  inipp::get_value(ini.sections["MESH"], "resolution", resolution);
+  inipp::get_value(ini.sections["MESH"], "rows", rows);
+  inipp::get_value(ini.sections["MESH"], "cols", cols);
+  inipp::get_value(ini.sections["GEO"], "radius", radius);
+  RegularMesh mesh = RegularMesh(rows, cols, resolution);
+  StereographicProjector projector(radius);
   mesh.generateCells();
   mesh.generateDelaunay();
   mesh.generateVoronoi();
