@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 {  
   // Parse Args
   CommandLineOptions options = parseCommandLine(argc, argv);
-  
+  std::cout << options.outFile << std::endl; 
   // Parse config
   inipp::Ini<char> ini;
   std::ifstream is(options.configFile);
@@ -67,5 +67,5 @@ int main(int argc, char *argv[])
   mesh.generateDelaunay();
   mesh.generateVoronoi();
   mesh.projectCells(projector);
-  mesh.writeNetCDF(std::string("out.nc"));
+  mesh.writeNetCDF(std::string(options.outFile));
 }

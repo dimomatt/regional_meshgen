@@ -9,7 +9,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   /*
    * Create File
    */
-  netCDF::NcFile outFile("out.nc", netCDF::NcFile::replace);
+  netCDF::NcFile outFile(filename, netCDF::NcFile::replace);
   
   /*
    * Define Dimensions
