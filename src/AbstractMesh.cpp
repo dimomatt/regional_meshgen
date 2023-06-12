@@ -92,7 +92,6 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   padSubvectors(this->cellsOnCell, this->maxEdges, -1);
   padSubvectors(this->verticesOnCell, this->maxEdges, -1);
   padSubvectors(this->cellsOnVertex, this->vertexDegree, -1); 
-  print2DVec(this->verticesOnCell); 
   // debug
   std::vector<double> xPlaneCellIn(this->cells.size());
   std::vector<double> yPlaneCellIn(this->cells.size());
@@ -171,17 +170,19 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   //weightsOnEdge.putVar(this->weightsOnEdge.data());
   
   // Write Connectivity Fields;
-  nEdgesOnCell.putVar(this->nEdgesOnCell.data());
+  //nEdgesOnCell.putVar(this->nEdgesOnCell.data());
   //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
-  indexToCellID.putVar(this->indexToCellID.data());
+  //indexToCellID.putVar(this->indexToCellID.data());
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
   //indexToVertexID.putVar(this->indexToVertexID.data()); 
-
+  
+  //cellsOnEdge.putVar(flatten(this->cellsOnEdge).data());
+  //verticesOnEdge.putVar(flatten(this->verticesOnEdge).data());
   cellsOnCell.putVar(flatten(this->cellsOnCell).data());
   edgesOnCell.putVar(flatten(this->edgesOnCell).data());
   verticesOnCell.putVar(flatten(this->verticesOnCell).data());
   cellsOnVertex.putVar(flatten(this->cellsOnVertex).data());
-  //edgesOnVertex.putVar(this->edgesOnVertex.data());
+  edgesOnVertex.putVar(flatten(this->edgesOnVertex).data());
   } catch (netCDF::exceptions::NcException& e) {
     std::cerr << "NetCDF exception: " << e.what() << std::endl;
     outFile.close();

@@ -222,14 +222,16 @@ void RegularMesh::generateVoronoi(){
   // cellsOnCell is now in ccw order,
   // we can calculate the edges
   // in ccw order from that.
+  this->cellsOnEdge.resize(this->nEdges * 2);
   this->edgesOnCell.resize(this->nCells);
   this->edgesOnVertex.resize(this->nVertices);
-  this->verticesOnEdge.resize(this->nEdges);
+  this->verticesOnEdge.resize(this->nEdges * 2);
   int cell = 0;
   std::map<std::pair<int, int>, int> insertedEdges;
   for (auto col : this->verticesOnCell){
     // Get the edge between the first and last vertex on a cell
-    std::pair<int,int> orderedPair = make_ordered_pair(col.back(), col.front());
+    std::pair<int,int> orderedPair = make_ordered_pair(col.back(),
+        col.front());
     Point2D candidateEdge = midpoint(this->verticesOnPlane[col.back()],
                                      this->verticesOnPlane[col.front()]);
     
@@ -244,7 +246,6 @@ void RegularMesh::generateVoronoi(){
       this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
       this->edgesOnPlane.push_back(candidateEdge);
     }
-    
     for (int i = 0; i < col.size() - 1; i++){
       // Repeat the previous algorithm but for the rest of the elements
       orderedPair = make_ordered_pair(col[i], col[i+1]);
@@ -260,9 +261,9 @@ void RegularMesh::generateVoronoi(){
         this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
         this->edgesOnVertex[col[i]].push_back(this->edgesOnPlane.size());
         this->edgesOnVertex[col[i + 1]].push_back(this->edgesOnPlane.size());
-        this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i]);
-        this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i + 1]);
-        this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
+        //this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i]);
+        //this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i + 1]);
+        //this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
         this->edgesOnPlane.push_back(candidateEdge);
       }
     }
