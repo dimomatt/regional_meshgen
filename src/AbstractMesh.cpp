@@ -88,7 +88,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
                                                  {nVertices, vertexDegree});
   
   
-   
+  padSubvectors(this->edgesOnCell, this->maxEdges, -1);
   padSubvectors(this->cellsOnCell, this->maxEdges, -1);
   padSubvectors(this->verticesOnCell, this->maxEdges, -1);
   padSubvectors(this->cellsOnVertex, this->vertexDegree, -1); 
@@ -173,12 +173,12 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   // Write Connectivity Fields;
   nEdgesOnCell.putVar(this->nEdgesOnCell.data());
   //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
-  //indexToCellID.putVar(this->indexToCellID.data());
+  indexToCellID.putVar(this->indexToCellID.data());
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
-  //indexToVertexID.putVar(this->indexToVertexID.data());
-  
+  //indexToVertexID.putVar(this->indexToVertexID.data()); 
+
   cellsOnCell.putVar(flatten(this->cellsOnCell).data());
-  //edgesOnCell.putVar(this->edgesOnCell.data());
+  edgesOnCell.putVar(flatten(this->edgesOnCell).data());
   verticesOnCell.putVar(flatten(this->verticesOnCell).data());
   cellsOnVertex.putVar(flatten(this->cellsOnVertex).data());
   //edgesOnVertex.putVar(this->edgesOnVertex.data());

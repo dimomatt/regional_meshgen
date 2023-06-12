@@ -206,6 +206,7 @@ void RegularMesh::generateCells()
       }
     }
   }
+  // Might as well do this here
   for (int i=1; i < this->indexToCellID.size(); i++){
     this->indexToCellID[i] = i;
   }
@@ -219,16 +220,20 @@ std::pair<int, int> make_ordered_pair(int a, int b) {
 
 void RegularMesh::generateVoronoi(){
   // cellsOnCell is now in ccw order,
-  // we can calculate the vertices and edges
+  // we can calculate the edges
   // in ccw order from that.
   this->edgesOnCell.resize(this->nCells);
+  this->edgesOnVertex.resize(this->nVertices);
+  this->verticesOnEdge.resize(this->nEdges);
   int cell = 0;
   std::map<std::pair<int, int>, int> insertedEdges;
   for (auto col : this->verticesOnCell){
+    // Get the edge between the first and last vertex on a cell
     std::pair<int,int> orderedPair = make_ordered_pair(col.back(), col.front());
     Point2D candidateEdge = midpoint(this->verticesOnPlane[col.back()],
                                      this->verticesOnPlane[col.front()]);
     
+    // Check if we have seen this before
     auto iterator = insertedEdges.find(orderedPair);
     if (iterator != insertedEdges.end()){
       int index = insertedEdges.at(orderedPair);
@@ -241,16 +246,23 @@ void RegularMesh::generateVoronoi(){
     }
     
     for (int i = 0; i < col.size() - 1; i++){
+      // Repeat the previous algorithm but for the rest of the elements
       orderedPair = make_ordered_pair(col[i], col[i+1]);
       candidateEdge = midpoint(this->verticesOnPlane[col[i]],
                               this->verticesOnPlane[col[i+1]]);
       iterator = insertedEdges.find(orderedPair);
+      this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
       if (iterator != insertedEdges.end()){
         int index = insertedEdges.at(orderedPair);
         this->edgesOnCell[cell].push_back(index);
       } else {
         insertedEdges.insert({orderedPair, this->edgesOnPlane.size()});
         this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
+        this->edgesOnVertex[col[i]].push_back(this->edgesOnPlane.size());
+        this->edgesOnVertex[col[i + 1]].push_back(this->edgesOnPlane.size());
+        this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i]);
+        this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i + 1]);
+        this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
         this->edgesOnPlane.push_back(candidateEdge);
       }
     }
