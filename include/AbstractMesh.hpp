@@ -26,7 +26,13 @@ class AbstractMesh
      */
     size_t rows;
     size_t cols;
-    int resolution;
+    int dy_m;
+    int dx_m;
+    
+    /*
+     *  MESH ATTRIBUTES;
+     */
+    
     
     /*
      *  MESH ELEMENTS

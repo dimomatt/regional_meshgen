@@ -15,7 +15,7 @@ class RegularMesh : public AbstractMesh
     std::vector<int> edgePoints;
 
   public:
-    RegularMesh(int row_, int col_, float spacing_);
+    RegularMesh(int row_, int col_, int dx_m, int dy_m);
 
     /*! Generate the initial grid */
     void generateCells();
@@ -28,6 +28,8 @@ class RegularMesh : public AbstractMesh
     
     /*! Project Cells down to a sphere using a projector */
     void projectCells(AbstractProjector& projector);
+
+    void rotateMeshToLatLong(float latitude, float longitude);
 };
 
 #endif

@@ -176,8 +176,8 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
   //indexToVertexID.putVar(this->indexToVertexID.data()); 
   
-  //cellsOnEdge.putVar(flatten(this->cellsOnEdge).data());
-  //verticesOnEdge.putVar(flatten(this->verticesOnEdge).data());
+  cellsOnEdge.putVar(flatten(this->cellsOnEdge).data());
+  verticesOnEdge.putVar(flatten(this->verticesOnEdge).data());
   cellsOnCell.putVar(flatten(this->cellsOnCell).data());
   edgesOnCell.putVar(flatten(this->edgesOnCell).data());
   verticesOnCell.putVar(flatten(this->verticesOnCell).data());

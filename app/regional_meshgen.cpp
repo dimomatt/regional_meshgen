@@ -55,17 +55,24 @@ int main(int argc, char *argv[])
   ini.parse(is);
   int rows = -1;
   int cols = -1;
-  double resolution = -1.0;
   double radius = -1.0;
-  inipp::get_value(ini.sections["MESH"], "resolution", resolution);
+  double latitude = -1.0;
+  double longitude = -1.0;
+  double dx_m = -1.0;
+  double dy_m = -1.0;
+  inipp::get_value(ini.sections["MESH"], "lat", latitude);
+  inipp::get_value(ini.sections["MESH"], "long", longitude);
+  inipp::get_value(ini.sections["MESH"], "dx_m", dx_m);
+  inipp::get_value(ini.sections["MESH"], "dy_m", dy_m);
   inipp::get_value(ini.sections["MESH"], "rows", rows);
   inipp::get_value(ini.sections["MESH"], "cols", cols);
   inipp::get_value(ini.sections["GEO"], "radius", radius);
-  RegularMesh mesh = RegularMesh(rows, cols, resolution);
+  RegularMesh mesh = RegularMesh(rows, cols, dx_m, dy_m);
   StereographicProjector projector(radius);
   mesh.generateCells();
   mesh.generateDelaunay();
   mesh.generateVoronoi();
   mesh.projectCells(projector);
+  mesh.rotateMeshToLatLong(latitude, longitude);
   mesh.writeNetCDF(std::string(options.outFile));
 }

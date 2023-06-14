@@ -12,10 +12,14 @@ extern "C" {
 }
 
 
-RegularMesh::RegularMesh(int rows_, int cols_, float resolution_)
+RegularMesh::RegularMesh(int rows_,
+                         int cols_,
+                         int dx_m,
+                         int dy_m)
 {
   // Set some variables
-  this->resolution = resolution_;
+  this->dx_m = dx_m;
+  this->dy_m = dy_m;
   this->rows = rows_;
   this->cols = cols_;
   this->nCells = (this->rows * this->cols);
@@ -121,11 +125,8 @@ void RegularMesh::generateDelaunay()
   }
 
   // Convert them from vectors of sets to vectors of vectors
-  std::cout << "Saving cellsOnCell" << std::endl;
   this->cellsOnCell = convertSetsToVectors(sharedVertices);
-  std::cout << "Saving verticesOnCell" << std::endl;
   this->verticesOnCell = convertSetsToVectors(verticesOnCell);
-  std::cout << "Saving cellsOnVertex" << std::endl;
   this->cellsOnVertex = convertSetsToVectors(cellsOnVertex);
 
   // Populate nEdgesOnCell
@@ -135,7 +136,7 @@ void RegularMesh::generateDelaunay()
   }
 
 
-  // Get the cells in counter clockwise order
+  // CCW ordering in VerticesOnCell
   for (int i=0; i < this->verticesOnCell.size(); i++){
     Point2D cellPoint = this->cellsOnPlane[i];
     std::sort(this->verticesOnCell[i].begin(),
@@ -148,6 +149,7 @@ void RegularMesh::generateDelaunay()
               return angle1 < angle2;
               });
   }
+  // CCW ordering in cellsOnCell
   for (int i=0; i < this->cellsOnCell.size(); i++){
     Point2D cellPoint = this->cellsOnPlane[i];
     std::sort(this->cellsOnCell[i].begin(),
@@ -191,11 +193,11 @@ void RegularMesh::generateCells()
 {
   float offset = 0;
   for (int i = 0; i < this->cols; i++){
-    offset = (i % 2) * (this->resolution / 2.);
+    offset = (i % 2) * (this->dy_m / 2.);
     for (int j = 0; j < this->rows; j++){
       Point2D point = Point2D();
-      point.x = this->resolution * i + 1.;
-      point.y = this->resolution * std::sqrt(3) *  0.75 * j + 1. + offset;
+      point.x = this->dx_m * i + 1.;
+      point.y = this->dy_m * j + 1. + offset;
       this->cellsOnPlane.push_back(point);
 
       // Store the edge points to be thrown out after triangulation
@@ -244,6 +246,11 @@ void RegularMesh::generateVoronoi(){
     else{
       insertedEdges.insert({orderedPair, this->edgesOnPlane.size()});
       this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
+      this->edgesOnVertex[col.back()].push_back(this->edgesOnPlane.size());
+      this->edgesOnVertex[col.front()].push_back(this->edgesOnPlane.size());
+      this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col.front());
+      this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col.back());
+      this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
       this->edgesOnPlane.push_back(candidateEdge);
     }
     for (int i = 0; i < col.size() - 1; i++){
@@ -261,13 +268,20 @@ void RegularMesh::generateVoronoi(){
         this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
         this->edgesOnVertex[col[i]].push_back(this->edgesOnPlane.size());
         this->edgesOnVertex[col[i + 1]].push_back(this->edgesOnPlane.size());
-        //this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i]);
-        //this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i + 1]);
-        //this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
+        this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i]);
+        this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i + 1]);
+        this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
         this->edgesOnPlane.push_back(candidateEdge);
       }
     }
     cell += 1;
   }
+  this->nEdges = this->edgesOnPlane.size();
+  this->edgesOnVertex.resize(this->nVertices);
+  std::cout << this->nVertices << std::endl;
   return;
+}
+
+void RegularMesh::rotateMeshToLatLong(float latitude, float longitude){
+  std::cout << "Rotating mesh to " << latitude << ", " << longitude << std::endl;
 }

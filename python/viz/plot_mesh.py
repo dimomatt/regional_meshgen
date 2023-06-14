@@ -25,7 +25,7 @@ x_edge = dataset.variables['xEdge'][:]
 y_edge = dataset.variables['yEdge'][:]
 z_edge = dataset.variables['zEdge'][:]
 
-'''
+
 x_cell_plane = dataset.variables['planeXCell'][:]
 y_cell_plane = dataset.variables['planeYCell'][:]
 
@@ -62,9 +62,6 @@ ax.set_xlabel('x (m)')
 ax.set_ylabel('y (m)')
 ax.set_zlabel('z (m)')
 
-
-
-'''
 
 for i, elem in enumerate(x_cell):
   ax.text(x_cell[i], y_cell[i], z_cell[i], str(i))
