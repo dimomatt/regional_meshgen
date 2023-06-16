@@ -37,6 +37,15 @@ inline CartesianPoint midpoint(CartesianPoint &a, CartesianPoint &b){
   midpoint.z = (a.z + b.z) / 2.0;
   return midpoint;
 }
+
+inline double radiansToDegrees(double radians){
+  return radians * ( 180.0 / M_PI );
+}
+
+inline double degreesToRadians(double degrees){
+  return degrees * ( M_PI / 180.0 );
+}
+
 inline double distanceSquared(Point2D &a, Point2D &b){
   double dx = b.x - a.x;
   double dy = b.y - a.y;
