@@ -87,7 +87,8 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   netCDF::NcVar kiteAreasOnVertex = outFile.addVar("kiteAreasOnVertex", netCDF::ncInt,
                                                  {nVertices, vertexDegree});
   
-  
+  padSubvectors(this->edgesOnEdge, this->maxEdges2, -1);
+  print2DVec(this->edgesOnEdge); 
   padSubvectors(this->edgesOnCell, this->maxEdges, -1);
   padSubvectors(this->cellsOnCell, this->maxEdges, -1);
   padSubvectors(this->verticesOnCell, this->maxEdges, -1);
@@ -176,6 +177,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   //indexToEdgeID.putVar(this->indexToEdgeID.data());
   //indexToVertexID.putVar(this->indexToVertexID.data()); 
   
+  edgesOnEdge.putVar(flatten(this->edgesOnEdge).data());
   cellsOnEdge.putVar(flatten(this->cellsOnEdge).data());
   verticesOnEdge.putVar(flatten(this->verticesOnEdge).data());
   cellsOnCell.putVar(flatten(this->cellsOnCell).data());

@@ -71,7 +71,7 @@ for i, elem in enumerate(x_vertex):
 
 for i, ele, in enumerate(x_edge):
   ax.text(x_edge[i], y_edge[i], z_edge[i], str(i))
-'''
-plt.show()
 
+plt.show()
+'''
 #plt.savefig('out.png')

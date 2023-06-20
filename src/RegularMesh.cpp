@@ -192,6 +192,8 @@ void RegularMesh::projectCells(AbstractProjector& projector){
 void RegularMesh::generateCells()
 {
   float offset = 0;
+  int cellIndex = 0;
+  this->cellIsOnEdge.resize(rows * cols);
   for (int i = 0; i < this->cols; i++){
     offset = (i % 2) * (this->dy_m / 2.);
     for (int j = 0; j < this->rows; j++){
@@ -204,8 +206,9 @@ void RegularMesh::generateCells()
       if (j == 0 || i == 0 ||
           j == this->rows - 1 ||
           i == this->cols - 1) {
-        this->edgePoints.push_back(this->cellsOnPlane.size() - 1);
+        this->cellIsOnEdge[cellIndex] = 1;
       }
+      cellIndex += 1;
     }
   }
   // Might as well do this here
@@ -219,7 +222,7 @@ std::pair<int, int> make_ordered_pair(int a, int b) {
   return std::make_pair(std::min(a, b), std::max(a, b));
 }
 
-
+    
 void RegularMesh::generateVoronoi(){
   // cellsOnCell is now in ccw order,
   // we can calculate the edges
@@ -237,40 +240,63 @@ void RegularMesh::generateVoronoi(){
     Point2D candidateEdge = midpoint(this->verticesOnPlane[col.back()],
                                      this->verticesOnPlane[col.front()]);
     
+    
     // Check if we have seen this before
     auto iterator = insertedEdges.find(orderedPair);
     if (iterator != insertedEdges.end()){
+      // If we have seen the edge, then just check the index
       int index = insertedEdges.at(orderedPair);
+      // Add the edge index to the edge on cell at current cell
       this->edgesOnCell[cell].push_back(index);
-    }
-    else{
+    } else{
+      // insert the edge in to the map as a key, with the value being
+      // the index of that edge
       insertedEdges.insert({orderedPair, this->edgesOnPlane.size()});
+      
+      // Insert the edge index in to the edgesOnCell array at the current cell
       this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
+
+      // Add the edges to the vertices used to construct the edge
       this->edgesOnVertex[col.back()].push_back(this->edgesOnPlane.size());
       this->edgesOnVertex[col.front()].push_back(this->edgesOnPlane.size());
+      
+      // Update the vertices to ones used to construct the edge
       this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col.front());
       this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col.back());
-      this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
+      
+      // Finally, add the edge to the mesh
       this->edgesOnPlane.push_back(candidateEdge);
     }
     for (int i = 0; i < col.size() - 1; i++){
       // Repeat the previous algorithm but for the rest of the elements
-      orderedPair = make_ordered_pair(col[i], col[i+1]);
+      orderedPair = make_ordered_pair(col[i], col[i+1]);    
       candidateEdge = midpoint(this->verticesOnPlane[col[i]],
                               this->verticesOnPlane[col[i+1]]);
       iterator = insertedEdges.find(orderedPair);
-      this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
+
       if (iterator != insertedEdges.end()){
+        // Insert edge index in to the array at the current cell
         int index = insertedEdges.at(orderedPair);
         this->edgesOnCell[cell].push_back(index);
+
       } else {
+        // If we haven't seen the edge yet,
+        // Insert the edge in to the map as a key for the index of the edge
         insertedEdges.insert({orderedPair, this->edgesOnPlane.size()});
+        
+        // add the edge index to the array for the current cell
         this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
+
+        // Add the edge to the vertices used to construct the edge
         this->edgesOnVertex[col[i]].push_back(this->edgesOnPlane.size());
         this->edgesOnVertex[col[i + 1]].push_back(this->edgesOnPlane.size());
+        
+        // Add the vertices used to construct the edge to the current edge
+        // array
         this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i]);
         this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col[i + 1]);
-        this->cellsOnEdge[this->edgesOnPlane.size()].push_back(cell);
+        
+        // finally, add the edge to the mesh
         this->edgesOnPlane.push_back(candidateEdge);
       }
     }
@@ -278,10 +304,34 @@ void RegularMesh::generateVoronoi(){
   }
   this->nEdges = this->edgesOnPlane.size();
   this->edgesOnVertex.resize(this->nVertices);
-  std::cout << this->nVertices << std::endl;
+  // Get the cells that claim each edge
+  for (int cell = 0; cell < this->edgesOnCell.size(); cell++){
+    for (auto edge : this->edgesOnCell[cell]){
+      this->cellsOnEdge[edge].push_back(cell);
+    }
+  }
+  
   return;
 }
 
 void RegularMesh::rotateMeshToLatLong(float latitude, float longitude){
   std::cout << "Rotating mesh to " << latitude << ", " << longitude << std::endl;
+}
+
+void RegularMesh::getEdgesOnEdge(){
+  std::cout << "Finding edges on edges" << std::endl;
+  this->edgesOnEdge.resize(this->nEdges);
+  // Loop over CellsOnEdge
+  for (int edge = 0; edge < this->cellsOnEdge.size(); edge++){ 
+    for (auto cell : this->cellsOnEdge[edge]) {
+      // For each of the two cells, loop over EdgesOnCell[cell]
+      for (int j = 0; j < this->edgesOnCell[cell].size(); j++){
+        int edgeOnCell = this->edgesOnCell[cell][j];
+        
+        if (edgeOnCell != edge) {
+          this->edgesOnEdge[edge].push_back(edgeOnCell);
+        }
+      }
+    } 
+  }
 }
