@@ -125,38 +125,37 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   
   // Write variable
   try {
-   std::vector<double> latCellIn(this->cells.size());
-   std::vector<double> lonCellIn(this->cells.size());
-   std::vector<double> xCellIn(this->cells.size());
-   std::vector<double> yCellIn(this->cells.size());
-   std::vector<double> zCellIn(this->cells.size());
-   for (size_t i=0; i < this->cells.size(); i++) {
-     CartesianPoint cell = this->cells[i];
-     xCellIn[i] = cell.x;
-     yCellIn[i] = cell.y;
-     zCellIn[i] = cell.z;
-     latCellIn[i] = this->latLonCells[i].lat;
-     lonCellIn[i] = this->latLonCells[i].lon;
-   }
-   xCell.putVar(xCellIn.data());
-   yCell.putVar(yCellIn.data());
-   zCell.putVar(zCellIn.data()); 
-   latCell.putVar(latCellIn.data());
-   longCell.putVar(lonCellIn.data());
-   std::vector<double> xEdgeIn(this->edges.size());
-   std::vector<double> yEdgeIn(this->edges.size());
-   std::vector<double> zEdgeIn(this->edges.size());
-   for (size_t i=0; i < this->edges.size(); i++) {
-     CartesianPoint edge = this->edges[i];
-     xEdgeIn[i] = edge.x;
-     yEdgeIn[i] = edge.y;
-     zEdgeIn[i] = edge.z;
-
-   } 
-   xEdge.putVar(xEdgeIn.data());
-   yEdge.putVar(yEdgeIn.data());
-   zEdge.putVar(zEdgeIn.data());
-   std::vector<double> latVertexIn(this->vertices.size());
+    std::vector<double> latCellIn(this->cells.size());
+    std::vector<double> lonCellIn(this->cells.size());
+    std::vector<double> xCellIn(this->cells.size());
+    std::vector<double> yCellIn(this->cells.size());
+    std::vector<double> zCellIn(this->cells.size());
+    for (size_t i=0; i < this->cells.size(); i++) {
+      CartesianPoint cell = this->cells[i];
+      xCellIn[i] = cell.x;
+      yCellIn[i] = cell.y;
+      zCellIn[i] = cell.z;
+      latCellIn[i] = this->latLonCells[i].lat;
+      lonCellIn[i] = this->latLonCells[i].lon;
+    }
+    xCell.putVar(xCellIn.data());
+    yCell.putVar(yCellIn.data());
+    zCell.putVar(zCellIn.data()); 
+    latCell.putVar(latCellIn.data());
+    longCell.putVar(lonCellIn.data());
+    std::vector<double> xEdgeIn(this->edges.size());
+    std::vector<double> yEdgeIn(this->edges.size());
+    std::vector<double> zEdgeIn(this->edges.size());
+    for (size_t i=0; i < this->edges.size(); i++) {
+      CartesianPoint edge = this->edges[i];
+      xEdgeIn[i] = edge.x;
+      yEdgeIn[i] = edge.y;
+      zEdgeIn[i] = edge.z;
+    }
+    xEdge.putVar(xEdgeIn.data());
+    yEdge.putVar(yEdgeIn.data());
+    zEdge.putVar(zEdgeIn.data());
+    std::vector<double> latVertexIn(this->vertices.size());
     std::vector<double> lonVertexIn(this->vertices.size());
     std::vector<double> xVertexIn(this->vertices.size());
     std::vector<double> yVertexIn(this->vertices.size());
@@ -169,20 +168,20 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
       latVertexIn[i] = this->latLonVertices[i].lat;
       lonVertexIn[i] = this->latLonVertices[i].lon;
     } 
-   xVertex.putVar(xVertexIn.data());
-   yVertex.putVar(yVertexIn.data());
-   zVertex.putVar(zVertexIn.data());
-   latVertex.putVar(latVertexIn.data());
-   lonVertex.putVar(lonVertexIn.data());
+    xVertex.putVar(xVertexIn.data());
+    yVertex.putVar(yVertexIn.data());
+    zVertex.putVar(zVertexIn.data());
+    latVertex.putVar(latVertexIn.data());
+    lonVertex.putVar(lonVertexIn.data());
 
-  std::vector<double> latEdgeIn(this->edges.size());
-  std::vector<double> lonEdgeIn(this->edges.size());
-  for (size_t i=0; i < this->edges.size(); i++) {
-    latEdgeIn[i] = this->latLonEdges[i].lat;
-    lonEdgeIn[i] = this->latLonEdges[i].lon;
-  }  
-  latEdge.putVar(latEdgeIn.data());
-  lonEdge.putVar(lonEdgeIn.data());
+    std::vector<double> latEdgeIn(this->edges.size());
+    std::vector<double> lonEdgeIn(this->edges.size());
+    for (size_t i=0; i < this->edges.size(); i++) {
+      latEdgeIn[i] = this->latLonEdges[i].lat;
+      lonEdgeIn[i] = this->latLonEdges[i].lon;
+    }  
+    latEdge.putVar(latEdgeIn.data());
+    lonEdge.putVar(lonEdgeIn.data());
   //areaCell.putVar(this->areaCell.data());
   //areaTriangle.putVar(this->areaTriangle.data());
   //meshDensity.putVar(this->meshDensity.data());
@@ -193,20 +192,20 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   //weightsOnEdge.putVar(this->weightsOnEdge.data());
   
   // Write Connectivity Fields;
-  //nEdgesOnCell.putVar(this->nEdgesOnCell.data());
-  //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
-  //indexToCellID.putVar(this->indexToCellID.data());
-  //indexToEdgeID.putVar(this->indexToEdgeID.data());
-  //indexToVertexID.putVar(this->indexToVertexID.data()); 
+    nEdgesOnCell.putVar(this->nEdgesOnCell.data());
+    //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
+    //indexToCellID.putVar(this->indexToCellID.data());
+    //indexToEdgeID.putVar(this->indexToEdgeID.data());
+    //indexToVertexID.putVar(this->indexToVertexID.data()); 
   
-  edgesOnEdge.putVar(flatten(this->edgesOnEdge).data());
-  cellsOnEdge.putVar(flatten(this->cellsOnEdge).data());
-  verticesOnEdge.putVar(flatten(this->verticesOnEdge).data());
-  cellsOnCell.putVar(flatten(this->cellsOnCell).data());
-  edgesOnCell.putVar(flatten(this->edgesOnCell).data());
-  verticesOnCell.putVar(flatten(this->verticesOnCell).data());
-  cellsOnVertex.putVar(flatten(this->cellsOnVertex).data());
-  edgesOnVertex.putVar(flatten(this->edgesOnVertex).data());
+    edgesOnEdge.putVar(flatten(this->edgesOnEdge).data());
+    cellsOnEdge.putVar(flatten(this->cellsOnEdge).data());
+    verticesOnEdge.putVar(flatten(this->verticesOnEdge).data());
+    cellsOnCell.putVar(flatten(this->cellsOnCell).data());
+    edgesOnCell.putVar(flatten(this->edgesOnCell).data());
+    verticesOnCell.putVar(flatten(this->verticesOnCell).data());
+    cellsOnVertex.putVar(flatten(this->cellsOnVertex).data());
+    edgesOnVertex.putVar(flatten(this->edgesOnVertex).data());
   } catch (netCDF::exceptions::NcException& e) {
     std::cerr << "NetCDF exception: " << e.what() << std::endl;
     outFile.close();
@@ -225,5 +224,68 @@ LatLonPoint AbstractMesh::convertCartesianToLatLon(CartesianPoint point)
   return p; 
 }
 
+double AbstractMesh::planeDistance(CartesianPoint a,
+                                   CartesianPoint b)
+{
+  return sqrt(((a.x - b.x) * (a.x - b.x)) +
+              ((a.y - b.y) * (a.y - b.y)) +
+              ((a.z - b.z) * (a.z - b.z))); 
+}
 
 
+double AbstractMesh::greatCircleDistance(CartesianPoint a,
+                                         CartesianPoint b)
+{
+  double r, c;
+  r = 1.0;
+
+  c = planeDistance(a, b);
+
+  return 2.0 * r * asinl(c / 2.0 * r);
+}
+
+CartesianPoint AbstractMesh::crossProduct(CartesianPoint a,
+                                          CartesianPoint b)
+{
+  CartesianPoint cross;
+  cross.x = a.y * b.z - a.z * b.y;
+  cross.y = a.z * b.x - a.x * b.z;
+  cross.z = a.x * b.y - a.y * b.x;
+  return cross;
+}
+
+// Get angle between vector AB and AC on sphere
+double AbstractMesh::getSphereAngle(CartesianPoint a,
+                                    CartesianPoint b,
+                                    CartesianPoint c)
+{
+  double A, B, C, s, sin_angle;
+  CartesianPoint ab, ac;
+
+  CartesianPoint abCrossAc;
+
+  A = greatCircleDistance(b, c);
+  B = greatCircleDistance(a, c);
+  C = greatCircleDistance(a, b);
+  
+  ab = b - a;
+  ac = c - a;
+
+  abCrossAc = crossProduct(ab, ac);
+  s = 0.5 * (A + B + C);
+  sin_angle = sqrt(std::min(1.0,
+                       std::max(0.0,
+                          (sin(s-B) * sin(s-C) / sin(B)*sin(C)))));
+  if (dotProduct(abCrossAc, a) >= 0.0) {
+    return 2.0 * asin(std::max(std::min(sin_angle, 1.0), -1.0));
+  }
+  else {
+    return -2.0 * asin(std::max(std::min(sin_angle, 1.0), -1.0));
+  }
+}
+
+double AbstractMesh::dotProduct(CartesianPoint a,
+                                CartesianPoint b)
+{
+  return (a.x * b.x + a.y * b.y + a.z * b.z);
+}

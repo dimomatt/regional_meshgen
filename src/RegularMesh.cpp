@@ -207,7 +207,6 @@ void RegularMesh::projectCells(AbstractProjector& projector){
                  this->latLonEdges.begin(),
                  [&](CartesianPoint x){
                  return this->convertCartesianToLatLon(x); });
-
 }
 
 void RegularMesh::generateCells()
@@ -355,3 +354,8 @@ void RegularMesh::getEdgesOnEdge(){
     } 
   }
 }
+
+void RegularMesh::getEdgeWeights(){
+  return;
+}
+

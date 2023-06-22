@@ -78,18 +78,33 @@ class AbstractMesh
     /*! Write the file to a netcdf */
     void writeNetCDF(const std::string& filename);
     
-    void getKiteAreaOnSphere(LatLonPoint a,
-                             LatLonPoint b,
-                             LatLonPoint c,
-                             LatLonPoint d);
+    double dotProduct(CartesianPoint a,
+                      CartesianPoint b);
+        
+    CartesianPoint crossProduct(CartesianPoint a,
+                                CartesianPoint b);
+ 
+    double planeDistance(CartesianPoint a,
+                         CartesianPoint b);
 
-    void getTriangleAreaOnSphere(LatLonPoint a,
-                                 LatLonPoint b,
-                                 LatLonPoint c);
+    double greatCircleDistance(CartesianPoint a,
+                               CartesianPoint b);
 
-    void getAngleOnSphere(LatLonPoint a,
-                          LatLonPoint b,
-                          LatLonPoint c);
+    double getKiteAreaOnSphere(LatLonPoint a,
+                               LatLonPoint b,
+                               LatLonPoint c,
+                               LatLonPoint d);
+
+    double getTriangleAreaOnSphere(CartesianPoint a,
+                                   CartesianPoint b,
+                                   CartesianPoint c);
+    
+    double getPlaneAngle(CartesianPoint a,
+                         CartesianPoint b,
+                         CartesianPoint c);
+    double getSphereAngle(CartesianPoint a,
+                          CartesianPoint b,
+                          CartesianPoint c);
    
     LatLonPoint convertCartesianToLatLon(CartesianPoint point); 
     /*
