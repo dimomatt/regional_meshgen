@@ -80,7 +80,7 @@ class AbstractMesh
     
     double dotProduct(CartesianPoint a,
                       CartesianPoint b);
-        
+ 
     CartesianPoint crossProduct(CartesianPoint a,
                                 CartesianPoint b);
  
@@ -95,9 +95,9 @@ class AbstractMesh
                                LatLonPoint c,
                                LatLonPoint d);
 
-    double getTriangleAreaOnSphere(CartesianPoint a,
-                                   CartesianPoint b,
-                                   CartesianPoint c);
+    double triangleArea(CartesianPoint a,
+                        CartesianPoint b,
+                        CartesianPoint c);
     
     double getPlaneAngle(CartesianPoint a,
                          CartesianPoint b,

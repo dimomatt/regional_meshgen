@@ -214,7 +214,25 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   std::cout << "Done Writing NetCDF" << std::endl; 
   outFile.close();
 }
+double AbstractMesh::triangleArea(CartesianPoint a,
+                                  CartesianPoint b,
+                                  CartesianPoint c)
+{
+  double semiPerimeter, tanqe, sideA, sideB, sideC;
 
+  sideA = greatCircleDistance(a, b);
+  sideB = greatCircleDistance(a, c);
+  sideC = greatCircleDistance(b, c);
+  
+  semiPerimeter = 0.5 * (sideA + sideB + sideC);
+
+  tanqe = sqrt(tan(0.5 * semiPerimeter) *
+               tan(0.5 * (semiPerimeter - sideA)) *
+               tan(0.5 * (semiPerimeter - sideB)) * 
+               tan(0.5 * (semiPerimeter - sideC)));
+  return 4.0 * atan(tanqe); 
+
+}
 
 LatLonPoint AbstractMesh::convertCartesianToLatLon(CartesianPoint point)
 {
