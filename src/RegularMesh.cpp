@@ -12,12 +12,14 @@ extern "C" {
 }
 
 
-RegularMesh::RegularMesh(int rows_,
+RegularMesh::RegularMesh(double radius_,
+                         int rows_,
                          int cols_,
                          int dx_m,
                          int dy_m)
 {
   // Set some variables
+  this->radius = radius_;
   this->dx_m = dx_m;
   this->dy_m = dy_m;
   this->rows = rows_;
@@ -170,23 +172,42 @@ void RegularMesh::generateDelaunay()
 
 void RegularMesh::projectCells(AbstractProjector& projector){
   this->cells.resize(this->cellsOnPlane.size());
+  this->latLonCells.resize(this->cellsOnPlane.size());
   std::transform(this->cellsOnPlane.begin(),
                  this->cellsOnPlane.end(),
                  this->cells.begin(),
                  [&projector](Point2D x){ 
                  return projector.projectToSphere(x); });
+  std::transform(this->cells.begin(),
+                 this->cells.end(),
+                 this->latLonCells.begin(),
+                 [&](CartesianPoint x){
+                 return this->convertCartesianToLatLon(x);} );
   this->vertices.resize(this->verticesOnPlane.size());
+  this->latLonVertices.resize(this->verticesOnPlane.size());
   std::transform(this->verticesOnPlane.begin(),
                  this->verticesOnPlane.end(),
                  this->vertices.begin(),
                  [&projector](Point2D x){ 
                  return projector.projectToSphere(x); });
+  std::transform(this->vertices.begin(),
+                 this->vertices.end(),
+                 this->latLonVertices.begin(),
+                 [&](CartesianPoint x){
+                 return this->convertCartesianToLatLon(x); });
   this->edges.resize(this->edgesOnPlane.size());
+  this->latLonEdges.resize(this->edgesOnPlane.size());
   std::transform(this->edgesOnPlane.begin(),
                  this->edgesOnPlane.end(),
                  this->edges.begin(),
                  [&projector](Point2D x){ 
                  return projector.projectToSphere(x); });
+  std::transform(this->edges.begin(),
+                 this->edges.end(),
+                 this->latLonEdges.begin(),
+                 [&](CartesianPoint x){
+                 return this->convertCartesianToLatLon(x); });
+
 }
 
 void RegularMesh::generateCells()
@@ -327,7 +348,6 @@ void RegularMesh::getEdgesOnEdge(){
       // For each of the two cells, loop over EdgesOnCell[cell]
       for (int j = 0; j < this->edgesOnCell[cell].size(); j++){
         int edgeOnCell = this->edgesOnCell[cell][j];
-        
         if (edgeOnCell != edge) {
           this->edgesOnEdge[edge].push_back(edgeOnCell);
         }

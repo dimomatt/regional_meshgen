@@ -1,7 +1,9 @@
 #include "AbstractMesh.hpp"
+#include "point.hpp"
 #include <helpers.hpp>
 #include <string>
 #include <netcdf>
+#include <cmath>
 #include <algorithm>
 
 void AbstractMesh::writeNetCDF(const std::string& filename)
@@ -122,7 +124,9 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   planeYEdge.putVar(yPlaneEdgeIn.data());
   
   // Write variable
-  try { 
+  try {
+   std::vector<double> latCellIn(this->cells.size());
+   std::vector<double> lonCellIn(this->cells.size());
    std::vector<double> xCellIn(this->cells.size());
    std::vector<double> yCellIn(this->cells.size());
    std::vector<double> zCellIn(this->cells.size());
@@ -131,11 +135,14 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
      xCellIn[i] = cell.x;
      yCellIn[i] = cell.y;
      zCellIn[i] = cell.z;
+     latCellIn[i] = this->latLonCells[i].lat;
+     lonCellIn[i] = this->latLonCells[i].lon;
    }
    xCell.putVar(xCellIn.data());
    yCell.putVar(yCellIn.data());
    zCell.putVar(zCellIn.data()); 
-   
+   latCell.putVar(latCellIn.data());
+   longCell.putVar(lonCellIn.data());
    std::vector<double> xEdgeIn(this->edges.size());
    std::vector<double> yEdgeIn(this->edges.size());
    std::vector<double> zEdgeIn(this->edges.size());
@@ -144,11 +151,13 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
      xEdgeIn[i] = edge.x;
      yEdgeIn[i] = edge.y;
      zEdgeIn[i] = edge.z;
+
    } 
    xEdge.putVar(xEdgeIn.data());
    yEdge.putVar(yEdgeIn.data());
    zEdge.putVar(zEdgeIn.data());
-
+   std::vector<double> latVertexIn(this->vertices.size());
+    std::vector<double> lonVertexIn(this->vertices.size());
     std::vector<double> xVertexIn(this->vertices.size());
     std::vector<double> yVertexIn(this->vertices.size());
     std::vector<double> zVertexIn(this->vertices.size());
@@ -157,10 +166,23 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
       xVertexIn[i] = vertex.x;
       yVertexIn[i] = vertex.y;
       zVertexIn[i] = vertex.z;
+      latVertexIn[i] = this->latLonVertices[i].lat;
+      lonVertexIn[i] = this->latLonVertices[i].lon;
     } 
    xVertex.putVar(xVertexIn.data());
    yVertex.putVar(yVertexIn.data());
    zVertex.putVar(zVertexIn.data());
+   latVertex.putVar(latVertexIn.data());
+   lonVertex.putVar(lonVertexIn.data());
+
+  std::vector<double> latEdgeIn(this->edges.size());
+  std::vector<double> lonEdgeIn(this->edges.size());
+  for (size_t i=0; i < this->edges.size(); i++) {
+    latEdgeIn[i] = this->latLonEdges[i].lat;
+    lonEdgeIn[i] = this->latLonEdges[i].lon;
+  }  
+  latEdge.putVar(latEdgeIn.data());
+  lonEdge.putVar(lonEdgeIn.data());
   //areaCell.putVar(this->areaCell.data());
   //areaTriangle.putVar(this->areaTriangle.data());
   //meshDensity.putVar(this->meshDensity.data());
@@ -193,3 +215,15 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   std::cout << "Done Writing NetCDF" << std::endl; 
   outFile.close();
 }
+
+
+LatLonPoint AbstractMesh::convertCartesianToLatLon(CartesianPoint point)
+{
+  LatLonPoint p;
+  p.lat = radiansToDegrees(asin(point.z / this->radius));
+  p.lon = radiansToDegrees(atan2(point.x, point.y));
+  return p; 
+}
+
+
+

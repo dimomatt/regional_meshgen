@@ -15,7 +15,11 @@ class RegularMesh : public AbstractMesh
     std::vector<bool> cellIsOnEdge;
 
   public:
-    RegularMesh(int row_, int col_, int dx_m, int dy_m);
+    RegularMesh(double radius_, 
+                int row_,
+                int col_,
+                int dx_m,
+                int dy_m);
 
     /*! Generate the initial grid */
     void generateCells();

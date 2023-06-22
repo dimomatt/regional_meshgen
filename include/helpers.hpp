@@ -38,6 +38,14 @@ inline CartesianPoint midpoint(CartesianPoint &a, CartesianPoint &b){
   return midpoint;
 }
 
+inline double dotProduct(){
+  return -1;
+}
+
+inline double crossProduct(){
+  return -1;
+}
+
 inline double radiansToDegrees(double radians){
   return radians * ( 180.0 / M_PI );
 }

@@ -32,7 +32,7 @@ class AbstractMesh
     /*
      *  MESH ATTRIBUTES;
      */
-    
+    double radius;    
     
     /*
      *  MESH ELEMENTS
@@ -78,7 +78,20 @@ class AbstractMesh
     /*! Write the file to a netcdf */
     void writeNetCDF(const std::string& filename);
     
-    
+    void getKiteAreaOnSphere(LatLonPoint a,
+                             LatLonPoint b,
+                             LatLonPoint c,
+                             LatLonPoint d);
+
+    void getTriangleAreaOnSphere(LatLonPoint a,
+                                 LatLonPoint b,
+                                 LatLonPoint c);
+
+    void getAngleOnSphere(LatLonPoint a,
+                          LatLonPoint b,
+                          LatLonPoint c);
+   
+    LatLonPoint convertCartesianToLatLon(CartesianPoint point); 
     /*
      *  VIRTUAL FUNCTIONS
      */

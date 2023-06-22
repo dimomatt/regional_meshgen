@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
   inipp::get_value(ini.sections["MESH"], "rows", rows);
   inipp::get_value(ini.sections["MESH"], "cols", cols);
   inipp::get_value(ini.sections["GEO"], "radius", radius);
-  RegularMesh mesh = RegularMesh(rows, cols, dx_m, dy_m);
+  RegularMesh mesh = RegularMesh(radius, rows, cols, dx_m, dy_m);
   StereographicProjector projector(radius);
   mesh.generateCells();
   mesh.generateDelaunay();
