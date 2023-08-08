@@ -23,12 +23,6 @@ class RegularMesh : public AbstractMesh
 
     /*! Generate the initial grid */
     void generateCells();
-   
-    /*! Generate the Delaunay triangulation */
-    void generateDelaunay();
-
-    /*! Get the voronoi diagram of the mesh */
-    void generateVoronoi();
     
     void addEdge();
 
@@ -36,14 +30,13 @@ class RegularMesh : public AbstractMesh
 
     void getEdgeWeights();
     
-    void removeEdge();
+    void pruneBadCells();
 
-    void removeCell();
+    void removeEdge(int edgeIndex);
+
+    void removeCell(int cellIndex);
     
-    void removeVertex();
-
-    /*! Project Cells down to a sphere using a projector */
-    void projectCells(AbstractProjector& projector);
+    void removeVertex(int vertexIndex);
 
     void rotateMeshToLatLong(float latitude, float longitude);
 };

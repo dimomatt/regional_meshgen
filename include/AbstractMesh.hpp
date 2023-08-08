@@ -71,13 +71,24 @@ class AbstractMesh
     std::vector< std::vector<int> > verticesOnEdge;
     std::vector< std::vector<int> > cellsOnVertex;
     std::vector< std::vector<int> > edgesOnVertex;
-   
+
     /*
-     *  CLASS FUNCTIONS  
+     *  CLASS FUNCTIONS
      */
     /*! Write the file to a netcdf */
     void writeNetCDF(const std::string& filename);
-    
+
+    void generateVoronoi();
+
+    void generateDelaunay();
+
+    void projectCells(AbstractProjector &projector); 
+
+    /* 
+     *  MATH HELPERS
+     */
+    double getKiteAreasOnVertex(int vertex);
+
     double dotProduct(CartesianPoint a,
                       CartesianPoint b);
  
@@ -98,26 +109,21 @@ class AbstractMesh
     double triangleArea(CartesianPoint a,
                         CartesianPoint b,
                         CartesianPoint c);
-    
+
     double getPlaneAngle(CartesianPoint a,
                          CartesianPoint b,
                          CartesianPoint c);
     double getSphereAngle(CartesianPoint a,
                           CartesianPoint b,
                           CartesianPoint c);
-   
+
     LatLonPoint convertCartesianToLatLon(CartesianPoint point); 
+
     /*
      *  VIRTUAL FUNCTIONS
      */
-    /*! Generate the initial grid */
-    virtual void generateCells() = 0;
-    
-    /*! Generate Delaunay Triangulation */
-    virtual void generateDelaunay() = 0;
-
     /*! Get the voronoi diagram of the mesh */
-    virtual void generateVoronoi() = 0;
+    virtual void generateCells() = 0;
 
 };
 #endif // ABSTRACTMESH_H

@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
   mesh.generateVoronoi();
   mesh.getEdgesOnEdge();
   mesh.projectCells(projector);
+  mesh.pruneBadCells();
   mesh.rotateMeshToLatLong(latitude, longitude);
   mesh.writeNetCDF(std::string(options.outFile));
 }

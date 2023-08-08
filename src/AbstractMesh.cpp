@@ -6,6 +6,151 @@
 #include <cmath>
 #include <algorithm>
 
+/* 
+ * Generates the delaunay triangulation of a set of points.
+ */
+void AbstractMesh::generateDelaunay()
+{
+  struct triangulateio in, out, vorout;
+  std::vector<REAL> input_vertices;
+  
+  // Transform the points in to the preferred triangle format
+  for (const auto point : this->cellsOnPlane){
+    input_vertices.push_back(point.x);
+    input_vertices.push_back(point.y);
+  }
+
+  // Initialize a bunch of things that triangulate needs
+  in.numberofpoints = this->cellsOnPlane.size();
+  in.pointlist = &input_vertices[0];
+  in.numberofpointattributes = 0;
+  in.pointmarkerlist = NULL;
+  in.numberofsegments = 0;
+  in.segmentlist = NULL;
+  in.segmentmarkerlist = NULL;
+  out.pointmarkerlist = NULL;
+  out.segmentlist = NULL;
+  out.segmentmarkerlist = NULL;  
+  out.pointlist = NULL;
+  out.trianglelist = NULL;
+  out.triangleattributelist = NULL;
+  out.trianglearealist = NULL;
+  out.neighborlist = NULL;
+  out.segmentlist = NULL;
+  out.segmentmarkerlist = NULL;
+  out.edgemarkerlist = NULL;
+  out.normlist = NULL;
+  
+  // Index from zero, generate neighbor list, stay quiet
+  char triswitches[] = "znQ";
+
+  // Run the actual triangulate program
+  triangulate(triswitches, &in, &out, &vorout);
+  std::cout << "Done Triangulating" << std::endl;
+  std::cout << "there are " << out.numberoftriangles << " triangles" << std::endl;
+  
+  this->nVertices = out.numberoftriangles; 
+  this->nEdges = out.numberoftriangles;
+ 
+  std::vector<std::set<int>> sharedVertices;
+  std::vector<std::set<int>> verticesOnCell;
+  std::vector<std::set<int>> cellsOnVertex;
+  sharedVertices.resize(in.numberofpoints);
+  verticesOnCell.resize(in.numberofpoints);
+  cellsOnVertex.resize(out.numberoftriangles);
+  // This loop is slow at nlogn
+
+void AbstractMesh::generateVoronoi(){
+  
+  // cellsOnCell is now in ccw order,
+  // we can calculate the edges
+  // in ccw order from that.
+  this->cellsOnEdge.resize(this->nEdges * 2);
+  this->edgesOnCell.resize(this->nCells);
+  this->edgesOnVertex.resize(this->nVertices);
+  this->verticesOnEdge.resize(this->nEdges * 2);
+  int cell = 0;
+  std::map<std::pair<int, int>, int> insertedEdges;
+  for (auto col : this->verticesOnCell){
+    // Get the edge between the first and last vertex on a cell
+    std::pair<int,int> orderedPair = make_ordered_pair(col.back(),
+        col.front());
+    Point2D candidateEdge = midpoint(this->verticesOnPlane[col.back()],
+                                     this->verticesOnPlane[col.front()]);
+    
+    
+    // Check if we have seen this before
+    auto iterator = insertedEdges.find(orderedPair);
+    if (iterator != insertedEdges.end()){
+      // If we have seen the edge, then just check the index
+      int index = insertedEdges.at(orderedPair);
+      // Add the edge index to the edge on cell at current cell
+      this->edgesOnCell[cell].push_back(index);
+    } else{
+      // insert the edge in to the map as a key, with the value being
+      // the index of that edge
+      insertedEdges.insert({orderedPair, this->edgesOnPlane.size()});
+      
+      // Insert the edge index in to the edgesOnCell array at the current cell
+      this->edgesOnCell[cell].push_back(this->edgesOnPlane.size());
+
+      // Add the edges to the vertices used to construct the edge
+      this->edgesOnVertex[col.back()].push_back(this->edgesOnPlane.size());
+      this->edgesOnVertex[col.front()].push_back(this->edgesOnPlane.size());
+      
+      // Update the vertices to ones used to construct the edge
+      this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col.front());
+      this->verticesOnEdge[this->edgesOnPlane.size()].push_back(col.back());
+      
+      // Finally, add the edge to the mesh
+      this->edgesOnPlane.push_back(candidateEdge);
+    }
+    for (int i = 0; i < col.size() - 1; i++){
+      // Repeat the previous algorithm but for the rest of the elements
+      orderedPair = make_ordered_pair(col[i], col[i+1]);    
+      candidateEdge = midpoint(this->verticesOnPlane[col[i]],
+                              this->verticesOnPlane[col[i+1]]);
+      iterator = insertedEdges.find(orderedPair);
+
+void AbstractMesh::projectCells(AbstractProjector& projector){
+  this->cells.resize(this->cellsOnPlane.size());
+  this->latLonCells.resize(this->cellsOnPlane.size());
+  std::transform(this->cellsOnPlane.begin(),
+                 this->cellsOnPlane.end(),
+                 this->cells.begin(),
+                 [&projector](Point2D x){ 
+                 return projector.projectToSphere(x); });
+  std::transform(this->cells.begin(),
+                 this->cells.end(),
+                 this->latLonCells.begin(),
+                 [&](CartesianPoint x){
+                 return this->convertCartesianToLatLon(x);} );
+  this->vertices.resize(this->verticesOnPlane.size());
+  this->latLonVertices.resize(this->verticesOnPlane.size());
+  std::transform(this->verticesOnPlane.begin(),
+                 this->verticesOnPlane.end(),
+                 this->vertices.begin(),
+                 [&projector](Point2D x){ 
+                 return projector.projectToSphere(x); });
+  std::transform(this->vertices.begin(),
+                 this->vertices.end(),
+                 this->latLonVertices.begin(),
+                 [&](CartesianPoint x){
+                 return this->convertCartesianToLatLon(x); });
+  this->edges.resize(this->edgesOnPlane.size());
+  this->latLonEdges.resize(this->edgesOnPlane.size());
+  std::transform(this->edgesOnPlane.begin(),
+                 this->edgesOnPlane.end(),
+                 this->edges.begin(),
+                 [&projector](Point2D x){ 
+                 return projector.projectToSphere(x); });
+  std::transform(this->edges.begin(),
+                 this->edges.end(),
+                 this->latLonEdges.begin(),
+                 [&](CartesianPoint x){
+                 return this->convertCartesianToLatLon(x); });
+}
+
 void AbstractMesh::writeNetCDF(const std::string& filename)
 {
   /*
@@ -130,7 +275,9 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
     std::vector<double> xCellIn(this->cells.size());
     std::vector<double> yCellIn(this->cells.size());
     std::vector<double> zCellIn(this->cells.size());
+    
     for (size_t i=0; i < this->cells.size(); i++) {
+      this->indexToCellID[i] = i;
       CartesianPoint cell = this->cells[i];
       xCellIn[i] = cell.x;
       yCellIn[i] = cell.y;
@@ -147,6 +294,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
     std::vector<double> yEdgeIn(this->edges.size());
     std::vector<double> zEdgeIn(this->edges.size());
     for (size_t i=0; i < this->edges.size(); i++) {
+      this->indexToEdgeID[i] = i;
       CartesianPoint edge = this->edges[i];
       xEdgeIn[i] = edge.x;
       yEdgeIn[i] = edge.y;
@@ -161,6 +309,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
     std::vector<double> yVertexIn(this->vertices.size());
     std::vector<double> zVertexIn(this->vertices.size());
     for (size_t i=0; i < this->vertices.size(); i++) {
+      this->indexToVertexID[i] = i;
       CartesianPoint vertex = this->vertices[i];
       xVertexIn[i] = vertex.x;
       yVertexIn[i] = vertex.y;
@@ -194,7 +343,7 @@ void AbstractMesh::writeNetCDF(const std::string& filename)
   // Write Connectivity Fields;
     nEdgesOnCell.putVar(this->nEdgesOnCell.data());
     //nEdgesOnEdge.putVar(this->nEdgesOnEdge.data());
-    //indexToCellID.putVar(this->indexToCellID.data());
+    indexToCellID.putVar(this->indexToCellID.data());
     //indexToEdgeID.putVar(this->indexToEdgeID.data());
     //indexToVertexID.putVar(this->indexToVertexID.data()); 
   
@@ -233,6 +382,11 @@ double AbstractMesh::triangleArea(CartesianPoint a,
   return 4.0 * atan(tanqe); 
 
 }
+
+double AbstractMesh::getKiteAreasOnVertex(int vertex){
+return -1.0;  
+}
+
 
 LatLonPoint AbstractMesh::convertCartesianToLatLon(CartesianPoint point)
 {
